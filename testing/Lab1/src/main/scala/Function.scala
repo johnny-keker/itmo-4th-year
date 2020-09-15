@@ -1,5 +1,3 @@
-package Lab1
-
-class FirstTask {
+object Function {
   def sin(x: Double): Double = Math.sin(x)
 }
