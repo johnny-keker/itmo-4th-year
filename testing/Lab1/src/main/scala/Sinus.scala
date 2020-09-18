@@ -1,7 +1,8 @@
-object Function {
+
+object Sinus {
   val PRECISION = 1E-8
 
-  def sin(x: Double): Double = x match {
+  def compute(x: Double): Double = x match {
     case 0.0 => 0.0
     case _ => s(x, x)
   }
