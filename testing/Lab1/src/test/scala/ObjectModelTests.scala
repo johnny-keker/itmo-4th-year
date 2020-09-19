@@ -25,14 +25,14 @@ class ObjectModelTests {
   //<editor-fold desc="Character tests">
 
   @Test
-  def greetTest() = {
+  def greetTest(): Unit = {
     // init character test, simply test the toSting() output
-    val c = new Character("Jack", 27, List[Habit]())
+    val c = new Character("Jack", 27, habits)
     assertEquals("Hello, my name is Jack", c.toString())
   }
 
   @Test
-  def lifestyleTest() = {
+  def lifestyleTest(): Unit = {
     // in this assertion we pass whole habits list to
     // our character, that means that he has 4 healthy,
     // 4 unhealthy and 4 neutral habits. This is considered
@@ -51,23 +51,23 @@ class ObjectModelTests {
   val exceptionRule: ExpectedException = ExpectedException.none()
 
   @Test
-  def characterCreationNameValidationTest() = {
+  def characterCreationNameValidationTest(): Unit = {
     // in this assertion we expect character creation
     // to throw an exception because of empty character name
     exceptionRule.expectMessage("Character must have non-empty name!")
-    val _ = new Character("", 27, List[Habit]())
+    val _ = new Character("", 27, habits)
   }
 
   @Test
-  def characterCreationAgeValidationTest() = {
+  def characterCreationAgeValidationTest(): Unit = {
     // in this assertion we expect character creation
     // to throw an exception because of negative character age
     exceptionRule.expectMessage("Age must be positive integer!")
-    val _ = new Character("Jack", -27, List[Habit]())
+    val _ = new Character("Jack", -27, habits)
   }
 
   @Test
-  def characterCreationHabitsValidationTest() = {
+  def characterCreationHabitsValidationTest(): Unit = {
     // in this assertion we expect character creation
     // to throw an exception because of Nil as character habits
     exceptionRule.expectMessage("Habits cannot be Nil!")
@@ -78,7 +78,7 @@ class ObjectModelTests {
   //<editor-fold desc="Habit tests">
 
   @Test
-  def habitTest() = {
+  def habitTest(): Unit = {
     // init habit test, simply test the toSting() output
     assertEquals("Smoking is an unhealthy habit", habits.head.toString())
   }
