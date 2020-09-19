@@ -1,9 +1,7 @@
-import org.junit.Assert._
 import objectmodel._
-import org.junit.{Rule, Test}
-import org.junit.rules.ExpectedException
-
-import scala.annotation.meta.getter
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions._
+import org.junit.jupiter.api.function.Executable
 
 class ObjectModelTests {
   // large list of habits that we will use in test cases
@@ -26,9 +24,9 @@ class ObjectModelTests {
 
   @Test
   def greetTest(): Unit = {
-    // init character test, simply test the toSting() output
     val c = new Character("Jack", 27, habits)
-    assertEquals("Hello, my name is Jack", c.toString())
+    assertEquals("Hello, my name is Jack", c.toString(),
+      "Init character test, simply test the toSting() output")
   }
 
   @Test
@@ -38,40 +36,31 @@ class ObjectModelTests {
     // 4 unhealthy and 4 neutral habits. This is considered
     // as unhealthy lifestyle
     var c = new Character("Jack", 27, habits)
-    assertFalse(c.isLifestyleHealthy())
+    assertFalse(c.isLifestyleHealthy(), "Unhealthy lifestyle test")
 
     // in this case we pass all habits except the first one,
     // that means that Jack now has only 3 unhealthy habits
     // and we can call his lifestyle healthy
     c = new Character("Jack", 27, habits.tail)
-    assertTrue(c.isLifestyleHealthy())
+    assertTrue(c.isLifestyleHealthy(), "Healthy lifestyle test")
   }
 
-  @(Rule@getter)
-  val exceptionRule: ExpectedException = ExpectedException.none()
-
   @Test
-  def characterCreationNameValidationTest(): Unit = {
+  def characterCreationValidationTest(): Unit = {
     // in this assertion we expect character creation
     // to throw an exception because of empty character name
-    exceptionRule.expectMessage("Character must have non-empty name!")
-    val _ = new Character("", 27, habits)
-  }
+    var exec: Executable = () => new Character("", 27, habits)
+    assertThrows(classOf[Exception], exec)
 
-  @Test
-  def characterCreationAgeValidationTest(): Unit = {
     // in this assertion we expect character creation
     // to throw an exception because of negative character age
-    exceptionRule.expectMessage("Age must be positive integer!")
-    val _ = new Character("Jack", -27, habits)
-  }
+    exec = () => new Character("Jack", -27, habits)
+    assertThrows(classOf[Exception], exec)
 
-  @Test
-  def characterCreationHabitsValidationTest(): Unit = {
     // in this assertion we expect character creation
     // to throw an exception because of Nil as character habits
-    exceptionRule.expectMessage("Habits cannot be Nil!")
-    val _ = new Character("Jack", 27, Nil)
+    exec = () => new Character("Jack", 27, Nil)
+    assertThrows(classOf[Exception], exec)
   }
   //</editor-fold>
 
