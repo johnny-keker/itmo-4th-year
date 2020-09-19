@@ -5,6 +5,10 @@ class Character(
   var Age: Int,
   var Habits: List[Habit]
 ) {
+  if (Name == "") throw new Exception("Character must have non-empty name!")
+  if (Age < 0) throw new Exception("Age must be positive integer!")
+  if (Habits == Nil) throw new Exception("Habits cannot be Nil!")
+
   override def toString: String = s"Hello, my name is $Name"
 
   def isLifestyleHealthy(): Boolean =

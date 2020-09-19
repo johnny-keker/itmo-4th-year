@@ -1,6 +1,9 @@
-import org.junit.Test
 import org.junit.Assert._
 import objectmodel._
+import org.junit.{Rule, Test}
+import org.junit.rules.ExpectedException
+
+import scala.annotation.meta.getter
 
 class ObjectModelTests {
   // large list of habits that we will use in test cases
@@ -42,6 +45,33 @@ class ObjectModelTests {
     // and we can call his lifestyle healthy
     c = new Character("Jack", 27, habits.tail)
     assertEquals(true, c.isLifestyleHealthy())
+  }
+
+  @(Rule@getter)
+  val exceptionRule: ExpectedException = ExpectedException.none()
+
+  @Test
+  def characterCreationNameValidationTest() = {
+    // in this assertion we expect character creation
+    // to throw an exception because of empty character name
+    exceptionRule.expectMessage("Character must have non-empty name!")
+    val _ = new Character("", 27, List[Habit]())
+  }
+
+  @Test
+  def characterCreationAgeValidationTest() = {
+    // in this assertion we expect character creation
+    // to throw an exception because of negative character age
+    exceptionRule.expectMessage("Age must be positive integer!")
+    val _ = new Character("Jack", -27, List[Habit]())
+  }
+
+  @Test
+  def characterCreationHabitsValidationTest() = {
+    // in this assertion we expect character creation
+    // to throw an exception because of Nil as character habits
+    exceptionRule.expectMessage("Habits cannot be Nil!")
+    val _ = new Character("Jack", 27, Nil)
   }
   //</editor-fold>
 
