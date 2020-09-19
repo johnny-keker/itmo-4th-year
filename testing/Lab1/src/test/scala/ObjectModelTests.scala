@@ -38,13 +38,13 @@ class ObjectModelTests {
     // 4 unhealthy and 4 neutral habits. This is considered
     // as unhealthy lifestyle
     var c = new Character("Jack", 27, habits)
-    assertEquals(false, c.isLifestyleHealthy())
+    assertFalse(c.isLifestyleHealthy())
 
     // in this case we pass all habits except the first one,
     // that means that Jack now has only 3 unhealthy habits
     // and we can call his lifestyle healthy
     c = new Character("Jack", 27, habits.tail)
-    assertEquals(true, c.isLifestyleHealthy())
+    assertTrue(c.isLifestyleHealthy())
   }
 
   @(Rule@getter)
