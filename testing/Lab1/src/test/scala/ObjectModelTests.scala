@@ -4,18 +4,18 @@ import objectmodel._
 
 class ObjectModelTests {
   val habits = List(
-    new Habit("Smoking", HabitType.Unhealthy),
-    new Habit("Drinking", HabitType.Unhealthy),
-    new Habit("Swearing", HabitType.Unhealthy),
-    new Habit("Procrastination", HabitType.Unhealthy),
-    new Habit("Doing sports", HabitType.Healthy),
-    new Habit("8h sleep", HabitType.Healthy),
-    new Habit("Meditating", HabitType.Healthy),
-    new Habit("Planning", HabitType.Healthy),
-    new Habit("Cracking knuckles", HabitType.Neutral),
-    new Habit("Pen spinning", HabitType.Neutral),
-    new Habit("Superstitions", HabitType.Neutral),
-    new Habit("Talking to yourself", HabitType.Neutral)
+    new Habit("Smoking",              HabitType.Unhealthy),
+    new Habit("Drinking",             HabitType.Unhealthy),
+    new Habit("Swearing",             HabitType.Unhealthy),
+    new Habit("Procrastination",      HabitType.Unhealthy),
+    new Habit("Doing sports",         HabitType.Healthy),
+    new Habit("8h sleep",             HabitType.Healthy),
+    new Habit("Meditating",           HabitType.Healthy),
+    new Habit("Planning",             HabitType.Healthy),
+    new Habit("Cracking knuckles",    HabitType.Neutral),
+    new Habit("Pen spinning",         HabitType.Neutral),
+    new Habit("Superstitions",        HabitType.Neutral),
+    new Habit("Talking to yourself",  HabitType.Neutral)
   )
 
   @Test
@@ -32,7 +32,6 @@ class ObjectModelTests {
 
   @Test
   def habitTest() = {
-    val h = habits.head
-    assertEquals("Smoking is an unhealthy habit", h.toString())
+    assertEquals("Smoking is an unhealthy habit", habits.head.toString())
   }
 }
