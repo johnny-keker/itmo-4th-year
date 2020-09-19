@@ -1,4 +1,5 @@
-import RBTree.rotateLeft
+// https://en.wikipedia.org/wiki/Red%E2%80%93black_tree#Operations
+// rewritten in scala
 
 object Color extends Enumeration {
   val Black, Red = Value
