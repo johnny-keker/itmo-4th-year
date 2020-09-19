@@ -19,6 +19,8 @@ class ObjectModelTests {
     new Habit("Talking to yourself",  HabitType.Neutral)
   )
 
+  //<editor-fold desc="Character tests">
+
   @Test
   def greetTest() = {
     // init character test, simply test the toSting() output
@@ -41,10 +43,14 @@ class ObjectModelTests {
     c = new Character("Jack", 27, habits.tail)
     assertEquals(true, c.isLifestyleHealthy())
   }
+  //</editor-fold>
+
+  //<editor-fold desc="Habit tests">
 
   @Test
   def habitTest() = {
     // init habit test, simply test the toSting() output
     assertEquals("Smoking is an unhealthy habit", habits.head.toString())
   }
+  //</editor-fold>
 }
