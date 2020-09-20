@@ -65,7 +65,7 @@ public class RedBlackTree {
                     s = x.parent.left;
                 }
 
-                if (s.right.color == 0 && s.right.color == 0) {
+                if (s.right.color == 0) {
                     s.color = 1;
                     x = x.parent;
                 } else {
@@ -307,6 +307,10 @@ public class RedBlackTree {
     }
 
     public void deleteNode(int data) throws ElementNotFoundException {
+        if (this.root.left == TNULL && this.root.right == TNULL && this.root.data == data) {
+            this.root = TNULL;
+            return;
+        }
         deleteNodeHelper(this.root, data);
     }
 

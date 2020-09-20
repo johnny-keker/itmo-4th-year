@@ -7,6 +7,8 @@ import java.io.PrintStream
 class RBTreeTests {
   val rootField: Field  = classOf[RedBlackTree].getDeclaredField("root")
   rootField.setAccessible(true)
+  val tnullField: Field  = classOf[RedBlackTree].getDeclaredField("TNULL")
+  tnullField.setAccessible(true)
 
   @Test
   def rbTreeInsertTest(): Unit = {
@@ -93,6 +95,28 @@ class RBTreeTests {
     // ----------------------
     assertEquals(0, root.left.left.color)
     assertEquals(0, root.left.right.color)
+  }
+
+  @Test
+  def deleteAllNodesTest(): Unit = {
+    val tree: RedBlackTree = new RedBlackTree
+    tree.insert(55)
+    tree.insert(40)
+    tree.insert(65)
+    tree.insert(60)
+    tree.insert(75)
+    tree.insert(57)
+
+    tree.deleteNode(65)
+    tree.deleteNode(57)
+    tree.deleteNode(75)
+    tree.deleteNode(40)
+    tree.deleteNode(55)
+    tree.deleteNode(60)
+
+    val root = rootField.get(tree).asInstanceOf[Node]
+    val tnull = tnullField.get(tree).asInstanceOf[Node]
+    assertEquals(tnull, root)
   }
 
   @Test
