@@ -6,19 +6,25 @@ import org.junit.jupiter.api.function.Executable
 class ObjectModelTests {
   // large list of habits that we will use in test cases
   val habits = List(
-    new Habit("Smoking",              HabitType.Unhealthy),
-    new Habit("Drinking",             HabitType.Unhealthy),
-    new Habit("Swearing",             HabitType.Unhealthy),
-    new Habit("Procrastination",      HabitType.Unhealthy),
-    new Habit("Doing sports",         HabitType.Healthy),
-    new Habit("8h sleep",             HabitType.Healthy),
-    new Habit("Meditating",           HabitType.Healthy),
-    new Habit("Planning",             HabitType.Healthy),
-    new Habit("Cracking knuckles",    HabitType.Neutral),
-    new Habit("Pen spinning",         HabitType.Neutral),
-    new Habit("Superstitions",        HabitType.Neutral),
-    new Habit("Talking to yourself",  HabitType.Neutral)
+    new Habit("smoking",              HabitType.Unhealthy),
+    new Habit("drinking",             HabitType.Unhealthy),
+    new Habit("swearing",             HabitType.Unhealthy),
+    new Habit("procrastinating",      HabitType.Unhealthy),
+    new Habit("doing sports",         HabitType.Healthy),
+    new Habit("sleeping 8h",          HabitType.Healthy),
+    new Habit("meditating",           HabitType.Healthy),
+    new Habit("planning",             HabitType.Healthy),
+    new Habit("cracking knuckles",    HabitType.Neutral),
+    new Habit("spinning pen",         HabitType.Neutral),
+    new Habit("superstitious",        HabitType.Neutral),
+    new Habit("talking to myself",    HabitType.Neutral)
   )
+
+  val thoughts: List[String] = habits.map(h => s"I'm ${h.Name} and it's ${h.Type match {
+                                                                            case HabitType.Healthy => "cool!"
+                                                                            case HabitType.Unhealthy => "terrible("
+                                                                            case _ => "ok."
+                                                                          }}")
 
   //<editor-fold desc="Character tests">
 
@@ -36,14 +42,16 @@ class ObjectModelTests {
     // 4 unhealthy and 4 neutral habits. This is considered
     // as unhealthy lifestyle
     var c = new Character("Jill", 27, habits)
-    assertFalse(c.isLifestyleHealthy, "Unhealthy lifestyle test")
+    assertEquals("I think I have a big lifestyle issues", c.lifestyleThoughts,
+      "Unhealthy lifestyle test")
 
     // in this case we pass all habits except the first one,
     // that means that Jill now has only 3 unhealthy habits
     // and we could call her lifestyle healthy if
     // she'd quit smoking
     c = new Character("Jill", 27, habits.tail)
-    assertTrue(c.isLifestyleHealthy, "Healthy lifestyle test")
+    assertEquals("I don’t seem to have a lifestyle issues", c.lifestyleThoughts,
+      "Healthy lifestyle test")
   }
 
   @Test
@@ -65,6 +73,12 @@ class ObjectModelTests {
     exe = () => new Character("Jill", 27, null)
     exc = assertThrows(classOf[IllegalArgumentException], exe)
     assertEquals("Habits cannot be null!", exc.getMessage)
+  }
+
+  @Test
+  def randomThoughtTest(): Unit = {
+    val c = new Character("Jill", 27, habits)
+    assertTrue(thoughts.contains(c.randomThought))
   }
   //</editor-fold>
 
