@@ -144,5 +144,21 @@ class ObjectModelTests {
     exc = assertThrows(classOf[NonExistentCharacterException], exe)
     assertEquals("No one in Eizouken ever heard of Jill", exc.getMessage)
   }
+
+  @Test
+  def galaxyAddCharacterTest(): Unit = {
+    val g = new Galaxy("Eizouken")
+    val m = new Character("Midori Asakusa", 15, Gender.Female, List(new Habit("curious", HabitType.Healthy)))
+    val s = new Character("Sayaka Kanamori", 15, Gender.Female, List(new Habit("resourcefulness", HabitType.Healthy)))
+    val t = new Character("Tsubame Mizusaki", 15, Gender.Female, List(new Habit("hard-working", HabitType.Healthy)))
+
+    g.addCharacter(m)
+    g.addCharacter(s)
+    g.addCharacter(t)
+
+    assertEquals(m, g.getCharacterByName("Midori Asakusa"))
+    assertEquals(s, g.getCharacterByName("Sayaka Kanamori"))
+    assertEquals(t, g.getCharacterByName("Tsubame Mizusaki"))
+  }
   //</editor-fold>
 }
