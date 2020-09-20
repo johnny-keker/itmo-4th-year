@@ -20,8 +20,8 @@ class RBTree {
     root = RBTree.insert(root, new Node(key = key))
   }
 
-  def getRootLeftKey(): Int = root.left.key
-  def getRootRightKey(): Int = root.right.key
+  def getRootLeftKey: Int = root.left.key
+  def getRootRightKey: Int = root.right.key
 }
 
 private object RBTree {

@@ -1,7 +1,11 @@
+import java.lang.reflect.Field
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions._
 
 class RBTreeTests {
+  val rootField: Field  = classOf[RBTree].getDeclaredField("root")
+  rootField.setAccessible(true)
+
   @Test
   def rbTreeInitTest(): Unit = {
     val tree = new RBTree()
@@ -9,7 +13,9 @@ class RBTreeTests {
     tree.insertNodeByKey(2)
     tree.insertNodeByKey(3)
 
-    assertEquals(1, tree.getRootLeftKey())
-    assertEquals(3, tree.getRootRightKey())
+
+    val rootX = rootField.get(tree).asInstanceOf[Node]
+    assertEquals(1, rootX.left.key)
+    assertEquals(3, rootX.right.key)
   }
 }
