@@ -30,7 +30,7 @@ class ObjectModelTests {
 
   @Test
   def greetTest(): Unit = {
-    val c = new Character("Jill", 27, Nil)
+    val c = new Character("Jill", 27, Gender.Female, Nil)
     assertEquals("Hello, my name is Jill", c.toString(),
       "Init character test, simply test the toSting output")
   }
@@ -41,7 +41,7 @@ class ObjectModelTests {
     // our character, that means that he has 4 healthy,
     // 4 unhealthy and 4 neutral habits. This is considered
     // as unhealthy lifestyle
-    var c = new Character("Jill", 27, habits)
+    var c = new Character("Jill", 27, Gender.Female, habits)
     assertEquals("I think I have a big lifestyle issues", c.lifestyleThoughts,
       "Unhealthy lifestyle test")
 
@@ -49,7 +49,7 @@ class ObjectModelTests {
     // that means that Jill now has only 3 unhealthy habits
     // and we could call her lifestyle healthy if
     // she'd quit smoking
-    c = new Character("Jill", 27, habits.tail)
+    c = new Character("Jill", 27, Gender.Female, habits.tail)
     assertEquals("I don’t seem to have a lifestyle issues", c.lifestyleThoughts,
       "Healthy lifestyle test")
   }
@@ -58,27 +58,35 @@ class ObjectModelTests {
   def characterCreationValidationTest(): Unit = {
     // in this assertion we expect character creation
     // to throw an exception because of empty character name
-    var exe: Executable = () => new Character("", 27, habits)
+    var exe: Executable = () => new Character("", 27, Gender.Female, habits)
     var exc = assertThrows(classOf[IllegalArgumentException], exe)
     assertEquals("Character must have non-empty name!", exc.getMessage)
 
     // in this assertion we expect character creation
     // to throw an exception because of negative character age
-    exe = () => new Character("Jill", -27, habits)
+    exe = () => new Character("Jill", -27, Gender.Female, habits)
     exc = assertThrows(classOf[IllegalArgumentException], exe)
     assertEquals("Age must be positive integer!", exc.getMessage)
 
     // in this assertion we expect character creation
     // to throw an exception because of Nil as character habits
-    exe = () => new Character("Jill", 27, null)
+    exe = () => new Character("Jill", 27, Gender.Female, null)
     exc = assertThrows(classOf[IllegalArgumentException], exe)
     assertEquals("Habits cannot be null!", exc.getMessage)
   }
 
   @Test
   def randomThoughtTest(): Unit = {
-    val c = new Character("Jill", 27, habits)
+    val c = new Character("Jill", 27, Gender.Female, habits)
     assertTrue(thoughts.contains(c.randomThought))
+  }
+
+  @Test
+  def throwsOnRandomThoughtIfNoHabits(): Unit = {
+    val c = new Character("Jill", 27, Gender.Female, Nil)
+    val exe: Executable = () => c.randomThought
+    val exc = assertThrows(classOf[FlatCharacterException], exe)
+    assertEquals("Jill has no thoughts! You should've gave her at least one habit!", exc.getMessage)
   }
   //</editor-fold>
 
