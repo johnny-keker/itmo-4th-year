@@ -8,6 +8,8 @@ class Node {
     int color;
 }
 
+class ElementNotFoundException extends Throwable {}
+
 public class RedBlackTree {
     private Node root;
     private Node TNULL;
@@ -96,7 +98,7 @@ public class RedBlackTree {
         v.parent = u.parent;
     }
 
-    private void deleteNodeHelper(Node node, int key) {
+    private void deleteNodeHelper(Node node, int key) throws ElementNotFoundException {
         Node z = TNULL;
         Node x, y;
         while (node != TNULL) {
@@ -112,8 +114,7 @@ public class RedBlackTree {
         }
 
         if (z == TNULL) {
-            System.out.println("Couldn't find key in the tree");
-            return;
+            throw new ElementNotFoundException();
         }
 
         y = z;
@@ -305,7 +306,7 @@ public class RedBlackTree {
         fixInsert(node);
     }
 
-    public void deleteNode(int data) {
+    public void deleteNode(int data) throws ElementNotFoundException {
         deleteNodeHelper(this.root, data);
     }
 

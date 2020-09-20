@@ -82,4 +82,14 @@ class RBTreeTests {
     assertTrue(bst.keyExists(57))
     assertFalse(bst.keyExists(40))
   }
+
+  @Test
+  def throwsOnDeleteNodeThatDoNotExistTest(): Unit = {
+    val tree = new RedBlackTree
+    tree.insert(1)
+    tree.insert(2)
+
+    assertFalse(tree.keyExists(3))
+    assertThrows(classOf[ElementNotFoundException], () => tree.deleteNode(3))
+  }
 }
