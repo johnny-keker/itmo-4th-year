@@ -9,26 +9,28 @@ class RBTreeTests {
   @Test
   def rbTreeInsertTest(): Unit = {
     val tree = new RBTree()
-    for (i <- 0 until 10)
+    for (i <- 0 to 4)
       tree.insertNodeByKey(i)
 
+    for (i <- 9 to 5 by -1)
+      tree.insertNodeByKey(i)
 
     val root = rootField.get(tree).asInstanceOf[Node]
     // checking node keys
     assertEquals(3, root.key)
     assertEquals(1, root.left.key)
-    assertEquals(5, root.right.key)
+    assertEquals(8, root.right.key)
     // ----------------------
     assertEquals(0, root.left.left.key)
     assertEquals(2, root.left.right.key)
     // ----------------------
-    assertEquals(4, root.right.left.key)
-    assertEquals(7, root.right.right.key)
+    assertEquals(6, root.right.left.key)
+    assertEquals(9, root.right.right.key)
     // ----------------------
-    assertEquals(6, root.right.right.left.key)
-    assertEquals(8, root.right.right.right.key)
+    assertEquals(4, root.right.left.left.key)
+    assertEquals(7, root.right.left.right.key)
     // ----------------------
-    assertEquals(9, root.right.right.right.right.key)
+    assertEquals(5, root.right.left.left.right.key)
 
     // checking node colors
     assertEquals(Color.Black, root.color)
@@ -38,12 +40,12 @@ class RBTreeTests {
     assertEquals(Color.Black, root.left.left.color)
     assertEquals(Color.Black, root.left.right.color)
     // ----------------------
-    assertEquals(Color.Black, root.right.left.color)
-    assertEquals(Color.Red, root.right.right.color)
+    assertEquals(Color.Red, root.right.left.color)
+    assertEquals(Color.Black, root.right.right.color)
     // ----------------------
-    assertEquals(Color.Black, root.right.right.left.color)
-    assertEquals(Color.Black, root.right.right.right.color)
+    assertEquals(Color.Black, root.right.left.left.color)
+    assertEquals(Color.Black, root.right.left.right.color)
     // ----------------------
-    assertEquals(Color.Red, root.right.right.right.right.color)
+    assertEquals(Color.Red, root.right.left.left.right.color)
   }
 }
