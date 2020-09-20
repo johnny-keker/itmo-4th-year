@@ -18,6 +18,7 @@ class Character(
 ) {
   if (name == "") throw new IllegalArgumentException("Character must have non-empty name!")
   if (age < 0) throw new IllegalArgumentException("Age must be positive integer!")
+  if (gender == null) throw new IllegalArgumentException("Gender cannot be null!")
   if (habits == null) throw new IllegalArgumentException("Habits cannot be null!")
 
   private val thoughts = habits.map(h => s"I'm ${h.Name} and it's ${h.Type match {

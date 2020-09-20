@@ -69,7 +69,13 @@ class ObjectModelTests {
     assertEquals("Age must be positive integer!", exc.getMessage)
 
     // in this assertion we expect character creation
-    // to throw an exception because of Nil as character habits
+    // to throw an exception because of null as character habits
+    exe = () => new Character("Jill", 27, null, habits)
+    exc = assertThrows(classOf[IllegalArgumentException], exe)
+    assertEquals("Gender cannot be null!", exc.getMessage)
+
+    // in this assertion we expect character creation
+    // to throw an exception because of null as character habits
     exe = () => new Character("Jill", 27, Gender.Female, null)
     exc = assertThrows(classOf[IllegalArgumentException], exe)
     assertEquals("Habits cannot be null!", exc.getMessage)
