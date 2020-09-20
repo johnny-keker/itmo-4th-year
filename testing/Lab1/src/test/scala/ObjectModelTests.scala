@@ -24,9 +24,9 @@ class ObjectModelTests {
 
   @Test
   def greetTest(): Unit = {
-    val c = new Character("Jack", 27, Nil)
-    assertEquals("Hello, my name is Jack", c.toString(),
-      "Init character test, simply test the toSting() output")
+    val c = new Character("Jill", 27, Nil)
+    assertEquals("Hello, my name is Jill", c.toString(),
+      "Init character test, simply test the toSting output")
   }
 
   @Test
@@ -35,13 +35,14 @@ class ObjectModelTests {
     // our character, that means that he has 4 healthy,
     // 4 unhealthy and 4 neutral habits. This is considered
     // as unhealthy lifestyle
-    var c = new Character("Jack", 27, habits)
+    var c = new Character("Jill", 27, habits)
     assertFalse(c.isLifestyleHealthy, "Unhealthy lifestyle test")
 
     // in this case we pass all habits except the first one,
-    // that means that Jack now has only 3 unhealthy habits
-    // and we can call his lifestyle healthy
-    c = new Character("Jack", 27, habits.tail)
+    // that means that Jill now has only 3 unhealthy habits
+    // and we could call her lifestyle healthy if
+    // she'd quit smoking
+    c = new Character("Jill", 27, habits.tail)
     assertTrue(c.isLifestyleHealthy, "Healthy lifestyle test")
   }
 
@@ -55,13 +56,13 @@ class ObjectModelTests {
 
     // in this assertion we expect character creation
     // to throw an exception because of negative character age
-    exe = () => new Character("Jack", -27, habits)
+    exe = () => new Character("Jill", -27, habits)
     exc = assertThrows(classOf[IllegalArgumentException], exe)
     assertEquals("Age must be positive integer!", exc.getMessage)
 
     // in this assertion we expect character creation
     // to throw an exception because of Nil as character habits
-    exe = () => new Character("Jack", 27, null)
+    exe = () => new Character("Jill", 27, null)
     exc = assertThrows(classOf[IllegalArgumentException], exe)
     assertEquals("Habits cannot be null!", exc.getMessage)
   }
