@@ -12,33 +12,6 @@ public class RedBlackTree {
     private Node root;
     private Node TNULL;
 
-    // Preorder
-    private void preOrderHelper(Node node) {
-        if (node != TNULL) {
-            System.out.print(node.data + " ");
-            preOrderHelper(node.left);
-            preOrderHelper(node.right);
-        }
-    }
-
-    // Inorder
-    private void inOrderHelper(Node node) {
-        if (node != TNULL) {
-            inOrderHelper(node.left);
-            System.out.print(node.data + " ");
-            inOrderHelper(node.right);
-        }
-    }
-
-    // Post order
-    private void postOrderHelper(Node node) {
-        if (node != TNULL) {
-            postOrderHelper(node.left);
-            postOrderHelper(node.right);
-            System.out.print(node.data + " ");
-        }
-    }
-
     // Search the tree
     private Node searchTreeHelper(Node node, int key) {
         if (node == TNULL || key == node.data) {
@@ -244,18 +217,6 @@ public class RedBlackTree {
         root = TNULL;
     }
 
-    private void preorder() {
-        preOrderHelper(this.root);
-    }
-
-    private void inorder() {
-        inOrderHelper(this.root);
-    }
-
-    private void postorder() {
-        postOrderHelper(this.root);
-    }
-
     public Boolean keyExists(int k) {
         return searchTreeHelper(this.root, k) != TNULL;
     }
@@ -265,40 +226,6 @@ public class RedBlackTree {
             node = node.left;
         }
         return node;
-    }
-
-    private Node maximum(Node node) {
-        while (node.right != TNULL) {
-            node = node.right;
-        }
-        return node;
-    }
-
-    private Node successor(Node x) {
-        if (x.right != TNULL) {
-            return minimum(x.right);
-        }
-
-        Node y = x.parent;
-        while (y != TNULL && x == y.right) {
-            x = y;
-            y = y.parent;
-        }
-        return y;
-    }
-
-    private Node predecessor(Node x) {
-        if (x.left != TNULL) {
-            return maximum(x.left);
-        }
-
-        Node y = x.parent;
-        while (y != TNULL && x == y.left) {
-            x = y;
-            y = y.parent;
-        }
-
-        return y;
     }
 
     private void leftRotate(Node x) {
@@ -376,10 +303,6 @@ public class RedBlackTree {
         }
 
         fixInsert(node);
-    }
-
-    private Node getRoot() {
-        return this.root;
     }
 
     public void deleteNode(int data) {
