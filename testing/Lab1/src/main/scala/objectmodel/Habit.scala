@@ -10,7 +10,7 @@ class Habit(
   var Name: String,
   var Type: HabitType.Value
 ) {
-  if (Name == "") throw new IllegalArgumentException("Habit must have non-empty name!")
+  if (Name == null || Name == "") throw new IllegalArgumentException("Habit must have non-empty name!")
   if (Type == null) throw new IllegalArgumentException("You must specify valid habit type!")
 
   override def toString: String = s"$Name is an ${Type.toString} habit"

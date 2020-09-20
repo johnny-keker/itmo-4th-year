@@ -101,7 +101,7 @@ class ObjectModelTests {
   @Test
   def habitTest(): Unit = {
     // init habit test, simply test the toSting() output
-    assertEquals("Smoking is an unhealthy habit", habits.head.toString())
+    assertEquals("smoking is an unhealthy habit", habits.head.toString())
   }
 
   @Test
@@ -113,6 +113,36 @@ class ObjectModelTests {
     exe = () => new Habit("Hmm", null)
     exc = assertThrows(classOf[IllegalArgumentException], exe)
     assertEquals("You must specify valid habit type!", exc.getMessage)
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Galaxy tests">
+
+  @Test
+  def initGalaxyTest(): Unit = {
+    val g = new Galaxy("Eizouken")
+    assertEquals("This is Eizouken galaxy!", g.toString)
+  }
+
+  @Test
+  def galaxyCreationValidationTest(): Unit = {
+    val exe: Executable = () => new Galaxy(null)
+    val exc = assertThrows(classOf[IllegalArgumentException], exe)
+    assertEquals("Galaxy must have non-empty name!", exc.getMessage)
+  }
+
+  @Test
+  def galaxyNonExistentCharacterTest(): Unit = {
+    val g = new Galaxy("Eizouken")
+    val c = new Character("Jill", 27, Gender.Female, habits)
+
+    var exe: Executable = () => g.getCharacterByName("Jill")
+    var exc = assertThrows(classOf[NonExistentCharacterException], exe)
+    assertEquals("No one in Eizouken ever heard of Jill", exc.getMessage)
+
+    exe = () => g.removeCharacter(c)
+    exc = assertThrows(classOf[NonExistentCharacterException], exe)
+    assertEquals("No one in Eizouken ever heard of Jill", exc.getMessage)
   }
   //</editor-fold>
 }

@@ -16,7 +16,7 @@ class Character(
    var gender: Gender.Value,
    var habits: List[Habit]
 ) {
-  if (name == "") throw new IllegalArgumentException("Character must have non-empty name!")
+  if (name == null || name == "") throw new IllegalArgumentException("Character must have non-empty name!")
   if (age < 0) throw new IllegalArgumentException("Age must be positive integer!")
   if (gender == null) throw new IllegalArgumentException("Gender cannot be null!")
   if (habits == null) throw new IllegalArgumentException("Habits cannot be null!")
