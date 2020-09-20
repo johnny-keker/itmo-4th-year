@@ -1,6 +1,8 @@
 import java.lang.reflect.Field
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions._
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 
 class RBTreeTests {
   val rootField: Field  = classOf[RedBlackTree].getDeclaredField("root")
@@ -65,22 +67,62 @@ class RBTreeTests {
 
   @Test
   def deleteNodeTest(): Unit = {
-    val bst: RedBlackTree = new RedBlackTree
-    bst.insert(55)
-    bst.insert(40)
-    bst.insert(65)
-    bst.insert(60)
-    bst.insert(75)
-    bst.insert(57)
+    val tree: RedBlackTree = new RedBlackTree
+    tree.insert(55)
+    tree.insert(40)
+    tree.insert(65)
+    tree.insert(60)
+    tree.insert(75)
+    tree.insert(57)
 
-    bst.deleteNode(40)
+    tree.deleteNode(40)
 
-    assertTrue(bst.keyExists(55))
-    assertTrue(bst.keyExists(65))
-    assertTrue(bst.keyExists(60))
-    assertTrue(bst.keyExists(75))
-    assertTrue(bst.keyExists(57))
-    assertFalse(bst.keyExists(40))
+    val root = rootField.get(tree).asInstanceOf[Node]
+    // checking node keys
+    assertEquals(65, root.data)
+    assertEquals(57, root.left.data)
+    assertEquals(75, root.right.data)
+    // ----------------------
+    assertEquals(55, root.left.left.data)
+    assertEquals(60, root.left.right.data)
+
+    // checking node colors
+    assertEquals(0, root.color)
+    assertEquals(1, root.left.color)
+    assertEquals(0, root.right.color)
+    // ----------------------
+    assertEquals(0, root.left.left.color)
+    assertEquals(0, root.left.right.color)
+  }
+
+  @Test
+  def deleteRootTest(): Unit = {
+    val tree: RedBlackTree = new RedBlackTree
+    tree.insert(55)
+    tree.insert(40)
+    tree.insert(65)
+    tree.insert(60)
+    tree.insert(75)
+    tree.insert(57)
+
+    tree.deleteNode(55)
+
+    val root = rootField.get(tree).asInstanceOf[Node]
+    // checking node keys
+    assertEquals(57, root.data)
+    assertEquals(40, root.left.data)
+    assertEquals(65, root.right.data)
+    // ----------------------
+    assertEquals(60, root.right.left.data)
+    assertEquals(75, root.right.right.data)
+
+    // checking node colors
+    assertEquals(0, root.color)
+    assertEquals(0, root.left.color)
+    assertEquals(1, root.right.color)
+    // ----------------------
+    assertEquals(0, root.left.left.color)
+    assertEquals(0, root.left.right.color)
   }
 
   @Test
@@ -91,5 +133,40 @@ class RBTreeTests {
 
     assertFalse(tree.keyExists(3))
     assertThrows(classOf[ElementNotFoundException], () => tree.deleteNode(3))
+  }
+
+  @Test
+  def printTreeTest(): Unit = {
+    val outContent = new ByteArrayOutputStream
+    System.setOut(new PrintStream(outContent))
+
+    val tree = new RedBlackTree
+    tree.printTree()
+    assertEquals("", outContent.toString())
+
+    tree.insert(1)
+    tree.printTree()
+    assertEquals(s"R----1(BLACK)${System.lineSeparator()}", outContent.toString())
+    outContent.reset()
+
+    val expected =
+    """ |R----40(BLACK)
+        |   L----1(BLACK)
+        |   R----60(RED)
+        |      L----55(BLACK)
+        |      |  R----57(RED)
+        |      R----65(BLACK)
+        |         R----75(RED)
+""".stripMargin
+    tree.insert(55)
+    tree.insert(40)
+    tree.insert(65)
+    tree.insert(60)
+    tree.insert(75)
+    tree.insert(57)
+    tree.printTree()
+    assertEquals(expected, outContent.toString())
+
+    System.setOut(System.out)
   }
 }
