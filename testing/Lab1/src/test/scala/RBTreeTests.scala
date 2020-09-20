@@ -48,4 +48,18 @@ class RBTreeTests {
     // ----------------------
     assertEquals(Color.Red, root.right.left.left.right.color)
   }
+
+  @Test
+  def keyExistsTest(): Unit = {
+    val tree = new RBTree()
+    tree.insertNodeByKey(1)
+    tree.insertNodeByKey(2)
+    tree.insertNodeByKey(3)
+
+    assertTrue(tree.keyExists(3))
+    assertTrue(tree.keyExists(2))
+    assertTrue(tree.keyExists(1))
+    assertFalse(tree.keyExists(0))
+    assertFalse(tree.keyExists(4))
+  }
 }

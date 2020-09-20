@@ -19,9 +19,13 @@ class RBTree {
   def insertNodeByKey(key: Int): Unit = {
     root = RBTree.insert(root, new Node(key = key))
   }
+
+  def keyExists(key: Int): Boolean = RBTree.findByKey(root, key) != null
 }
 
 private object RBTree {
+  //<editor-fold desc="Utils">
+
   def getParent(n: Node): Node = n match {
     case null => null
     case x => x.parent
@@ -90,6 +94,9 @@ private object RBTree {
     }
     nnew.parent = p
   }
+  //</editor-fold>
+
+  //<editor-fold desc="Insert">
 
   def insert(root: Node, n: Node): Node = {
     insertRecurse(root, n)
@@ -176,4 +183,19 @@ private object RBTree {
     p.color = Color.Black
     g.color = Color.Red
   }
+  //</editor-fold>
+
+  //<editor-fold desc="Find">
+
+  def findByKey(root: Node, key: Int): Node = {
+    if (key == root.key) return root
+    if (key > root.key) {
+      if (root.right == null) null
+      else findByKey(root.right, key)
+    } else {
+      if (root.left == null) null
+      else findByKey(root.left, key)
+    }
+  }
+  //</editor-fold>
 }
