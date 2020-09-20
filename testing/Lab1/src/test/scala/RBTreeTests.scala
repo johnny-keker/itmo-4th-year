@@ -3,63 +3,83 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions._
 
 class RBTreeTests {
-  val rootField: Field  = classOf[RBTree].getDeclaredField("root")
+  val rootField: Field  = classOf[RedBlackTree].getDeclaredField("root")
   rootField.setAccessible(true)
 
   @Test
   def rbTreeInsertTest(): Unit = {
-    val tree = new RBTree()
+    val tree = new RedBlackTree
     for (i <- 0 to 4)
-      tree.insertNodeByKey(i)
+      tree.insert(i)
 
     for (i <- 9 to 5 by -1)
-      tree.insertNodeByKey(i)
+      tree.insert(i)
 
     val root = rootField.get(tree).asInstanceOf[Node]
     // checking node keys
-    assertEquals(3, root.key)
-    assertEquals(1, root.left.key)
-    assertEquals(8, root.right.key)
+    assertEquals(3, root.data)
+    assertEquals(1, root.left.data)
+    assertEquals(8, root.right.data)
     // ----------------------
-    assertEquals(0, root.left.left.key)
-    assertEquals(2, root.left.right.key)
+    assertEquals(0, root.left.left.data)
+    assertEquals(2, root.left.right.data)
     // ----------------------
-    assertEquals(6, root.right.left.key)
-    assertEquals(9, root.right.right.key)
+    assertEquals(6, root.right.left.data)
+    assertEquals(9, root.right.right.data)
     // ----------------------
-    assertEquals(4, root.right.left.left.key)
-    assertEquals(7, root.right.left.right.key)
+    assertEquals(4, root.right.left.left.data)
+    assertEquals(7, root.right.left.right.data)
     // ----------------------
-    assertEquals(5, root.right.left.left.right.key)
+    assertEquals(5, root.right.left.left.right.data)
 
     // checking node colors
-    assertEquals(Color.Black, root.color)
-    assertEquals(Color.Black, root.left.color)
-    assertEquals(Color.Black, root.right.color)
+    assertEquals(0, root.color)
+    assertEquals(0, root.left.color)
+    assertEquals(0, root.right.color)
     // ----------------------
-    assertEquals(Color.Black, root.left.left.color)
-    assertEquals(Color.Black, root.left.right.color)
+    assertEquals(0, root.left.left.color)
+    assertEquals(0, root.left.right.color)
     // ----------------------
-    assertEquals(Color.Red, root.right.left.color)
-    assertEquals(Color.Black, root.right.right.color)
+    assertEquals(1, root.right.left.color)
+    assertEquals(0, root.right.right.color)
     // ----------------------
-    assertEquals(Color.Black, root.right.left.left.color)
-    assertEquals(Color.Black, root.right.left.right.color)
+    assertEquals(0, root.right.left.left.color)
+    assertEquals(0, root.right.left.right.color)
     // ----------------------
-    assertEquals(Color.Red, root.right.left.left.right.color)
+    assertEquals(1, root.right.left.left.right.color)
   }
 
   @Test
   def keyExistsTest(): Unit = {
-    val tree = new RBTree()
-    tree.insertNodeByKey(1)
-    tree.insertNodeByKey(2)
-    tree.insertNodeByKey(3)
+    val tree = new RedBlackTree
+    tree.insert(1)
+    tree.insert(2)
+    tree.insert(3)
 
     assertTrue(tree.keyExists(3))
     assertTrue(tree.keyExists(2))
     assertTrue(tree.keyExists(1))
     assertFalse(tree.keyExists(0))
     assertFalse(tree.keyExists(4))
+  }
+
+  @Test
+  def deleteNodeTest(): Unit = {
+    val bst: RedBlackTree = new RedBlackTree
+    bst.insert(55)
+    bst.insert(40)
+    bst.insert(65)
+    bst.insert(60)
+    bst.insert(75)
+    bst.insert(57)
+
+    bst.deleteNode(40)
+
+    assertTrue(bst.keyExists(55))
+    assertTrue(bst.keyExists(65))
+    assertTrue(bst.keyExists(60))
+    assertTrue(bst.keyExists(75))
+    assertTrue(bst.keyExists(57))
+    assertFalse(bst.keyExists(40))
   }
 }
