@@ -1,3 +1,4 @@
+import scala.annotation.tailrec
 // https://en.wikipedia.org/wiki/Red%E2%80%93black_tree#Operations
 // rewritten in scala
 
@@ -187,6 +188,7 @@ private object RBTree {
 
   //<editor-fold desc="Find">
 
+  @tailrec
   def findByKey(root: Node, key: Int): Node = {
     if (key == root.key) return root
     if (key > root.key) {
