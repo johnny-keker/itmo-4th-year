@@ -7,11 +7,18 @@ class EmptyGalaxyException(private val message: String) extends Exception(messag
 class NoWormholeException(private val message: String) extends Exception(message)
 class NoMessageFromAnotherGalaxyException(private val message: String) extends Exception(message)
 
+object GalaxyState extends Enumeration {
+  val Peace = Value("peaceful")
+  val AlmostWar = Value("almost at war")
+  val War = Value("at war")
+}
+
 class Galaxy(var name: String) {
   if (name == null || name == "") throw new IllegalArgumentException("Galaxy must have non-empty name!")
 
   private var characters = List.empty[Character]
   private var wormhole: Wormhole = _
+  private var state = GalaxyState.Peace
 
   override def toString: String = s"This is $name galaxy!"
 
@@ -41,4 +48,8 @@ class Galaxy(var name: String) {
   }
 
   def setWormhole(w: Wormhole): Unit = wormhole = w
+
+  def setState(s: GalaxyState.Value): Unit = state = s
+
+  def reportState: String = s"$name is $state"
 }

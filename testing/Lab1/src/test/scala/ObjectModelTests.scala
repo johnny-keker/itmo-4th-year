@@ -162,6 +162,18 @@ class ObjectModelTests {
   }
 
   @Test
+  def galaxyStateTest(): Unit = {
+    val g = new Galaxy("Forgotten world")
+    assertEquals("Forgotten world is peaceful", g.reportState)
+
+    g.setState(GalaxyState.AlmostWar)
+    assertEquals("Forgotten world is almost at war", g.reportState)
+
+    g.setState(GalaxyState.War)
+    assertEquals("Forgotten world is at war", g.reportState)
+  }
+
+  @Test
   def wormholeValidationTest(): Unit = {
     val g1 = new Galaxy("Eizouken")
 
