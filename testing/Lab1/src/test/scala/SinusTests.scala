@@ -29,6 +29,16 @@ class SinusTests {
   }
 
   @Test
+  def sinIsPeriodicTest(): Unit = {
+    var expected = 1/Math.sqrt(2)
+    for (i <- 1 to 12 by 4) {
+      assertEquals(expected, Sinus.compute(i * Math.PI / 4), Sinus.PRECISION, s"sin(${i}*Pi/4) must be $expected")
+      assertEquals(expected, Sinus.compute((i + 2) * Math.PI / 4), Sinus.PRECISION, s"sin(${i+2}*Pi/4) must be $expected")
+      expected *= -1
+    }
+  }
+
+  @Test
   def testRandom() = {
     val x = Random.nextDouble()
     assertEquals(Math.sin(x), Sinus.compute(x), Sinus.PRECISION, s"Sin of random double test, arg = $x")
