@@ -2,7 +2,7 @@ package objectmodel
 
 import scala.util.Random
 
-class FlatCharacterException(private val message: String = "") extends Exception(message)
+class FlatCharacterException(private val message: String) extends Exception(message)
 
 object Gender extends Enumeration {
   val Female = Value("her")

@@ -160,5 +160,67 @@ class ObjectModelTests {
     assertEquals(s, g.getCharacterByName("Sayaka Kanamori"))
     assertEquals(t, g.getCharacterByName("Tsubame Mizusaki"))
   }
+
+  @Test
+  def wormholeValidationTest(): Unit = {
+    val g1 = new Galaxy("Eizouken")
+
+    val exe: Executable = () => g1.getMessageFromWormhole
+    val exc = assertThrows(classOf[NoWormholeException], exe)
+    assertEquals("There is no wormhole in Eizouken", exc.getMessage)
+
+    val g2 = new Galaxy("VA-11 HALL-A")
+    val _ = new Wormhole(g1, g2)
+
+    val exc1 = assertThrows(classOf[NoMessageFromAnotherGalaxyException], exe)
+    assertEquals("Another galaxy is silent", exc1.getMessage)
+  }
   //</editor-fold>
+
+  //<editor-fold desc="Wormhole tests">
+
+  @Test
+  def initWormholeTest(): Unit = {
+    val g1 = new Galaxy("Eizouken")
+    val g2 = new Galaxy("VA-11 HALL-A")
+    val w = new Wormhole(g1, g2)
+    assertEquals("The wormhole between Eizouken and VA-11 HALL-A", w.toString)
+  }
+
+  @Test
+  def wormholeCreationValidationTest(): Unit = {
+    val exe: Executable = () => new Wormhole(null, null)
+    val exc = assertThrows(classOf[IllegalArgumentException], exe)
+    assertEquals("Wormhole should be initiated with two valid galaxies!", exc.getMessage)
+  }
+
+  @Test
+  def randomThoughtFromGalaxyValidationTest(): Unit = {
+    val g1 = new Galaxy("Eizouken")
+    val g2 = new Galaxy("VA-11 HALL-A")
+    val c = new Character("Jill", 27, Gender.Female, Nil)
+    g2.addCharacter(c)
+    val w = new Wormhole(g1, g2)
+
+    assertFalse(w.getRandomThoughtFromGalaxy(first = true), "EmptyGalaxyException")
+    assertFalse(w.getRandomThoughtFromGalaxy(first = false), "FlatCharacterException")
+  }
+  //</editor-fold>
+
+  @Test
+  def finalTest(): Unit = {
+    val g1 = new Galaxy("Eizouken")
+    val g2 = new Galaxy("VA-11 HALL-A")
+    val m = new Character("Midori Asakusa", 15, Gender.Female, List(new Habit("curious", HabitType.Healthy)))
+    val j = new Character("Jill", 27, Gender.Female, List(new Habit("hard-working", HabitType.Healthy)))
+    g1.addCharacter(m)
+    g2.addCharacter(j)
+    val w = new Wormhole(g1, g2)
+
+    assertTrue(w.getRandomThoughtFromGalaxy(first = true))
+    assertEquals("I'm curious and it's cool!", g2.getMessageFromWormhole)
+
+    assertTrue(w.getRandomThoughtFromGalaxy(first = false))
+    assertEquals("I'm hard-working and it's cool!", g1.getMessageFromWormhole)
+  }
 }
