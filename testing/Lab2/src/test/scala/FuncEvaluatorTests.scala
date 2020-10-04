@@ -38,4 +38,19 @@ class FuncEvaluatorTests extends AnyFunSuite with MockFactory {
     val f = new FuncEvaluator(mockTrig, mockLog)
     assert(f.func(0.313) === 0.403459, "sample positive area test with trig evaluator mocking")
   }
+
+  test("invalid input parameters test") {
+    val mockTrig = mock[TTrigEvaluator]
+    (mockTrig.sin _).expects(*, *).never()
+    (mockTrig.cos _).expects(*, *).never()
+    (mockTrig.csc _).expects(*, *).never()
+
+    val mockLog = mock[TLogEvaluator]
+    (mockLog.log _).expects(*, *, *).never()
+
+    val f = new FuncEvaluator(mockTrig, mockLog)
+    assert(f.func(Double.NaN).isNaN, "func(NaN) should be NaN")
+    assert(f.func(Double.PositiveInfinity).isNaN, "func(+inf) should be NaN")
+    assert(f.func(Double.NegativeInfinity).isNaN, "func(-inf) should be NaN")
+  }
 }

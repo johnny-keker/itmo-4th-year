@@ -1,0 +1,6 @@
+```{r}
+#install.packages("ggplot2")
+result <- read.csv("res.csv")
+plot(result, type="n")
+lines(result, type="o")
+```
