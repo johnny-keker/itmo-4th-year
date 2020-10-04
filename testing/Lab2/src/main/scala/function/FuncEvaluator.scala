@@ -3,7 +3,7 @@ package function
 import java.io._
 
 class FuncEvaluator(val trigEval: TTrigEvaluator, val logEval: TLogEvaluator) {
-  def func(x: Double, eps: Double): Double = if (x.isNaN) Double.NaN else x match {
+  def func(x: Double, eps: Double = 1E-6): Double = if (x.isNaN) Double.NaN else x match {
     case Double.PositiveInfinity => Double.NaN
     case Double.NegativeInfinity => Double.NaN
     case _ => {
