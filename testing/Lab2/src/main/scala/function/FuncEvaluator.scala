@@ -6,12 +6,7 @@ class FuncEvaluator(val trigEval: TTrigEvaluator, val logEval: TLogEvaluator) {
   def func(x: Double, eps: Double = 1E-6): Double = if (x.isNaN) Double.NaN else x match {
     case Double.PositiveInfinity => Double.NaN
     case Double.NegativeInfinity => Double.NaN
-    case _ => {
-      if (x > 0)
-        posFunc(x, eps)
-      else
-        negFunc(x, eps)
-    }
+    case _ => if (x > 0) posFunc(x, eps) else negFunc(x, eps)
   }
 
   def negFunc(x: Double, eps: Double): Double =

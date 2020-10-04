@@ -1,5 +1,3 @@
-package Lab2
-
 import function._
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalamock.scalatest.MockFactory
