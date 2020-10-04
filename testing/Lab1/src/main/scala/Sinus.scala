@@ -14,9 +14,4 @@ object Sinus {
     if (Math.abs(cur) < PRECISION) return res
     s(x, cur * (-x * x / (2.0 * n * (2.0 * n + 1.0))), n + 1, res + cur)
   }
-
-  def factorial(x: Int, res: Int = 1): Double = x match {
-    case 1 => res
-    case _ => factorial(x - 1, res * x)
-  }
 }
