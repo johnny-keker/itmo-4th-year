@@ -13,7 +13,7 @@ class FuncEvaluatorTests extends AnyFunSuite with MockFactory {
     (mockLog.log _).expects(1, 1).returning(-313).anyNumberOfTimes()
 
     val f = new FuncEvaluator(mockTrig, mockLog)
-    assert(f.func(-1) == 313)
-    assert(f.func(1) == -313)
+    assert(f.func(-1, 0) == 313)
+    assert(f.func(1, 0) == -313)
   }
 }
