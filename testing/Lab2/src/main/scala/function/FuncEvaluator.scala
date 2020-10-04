@@ -20,16 +20,16 @@ class FuncEvaluator(val trigEval: TTrigEvaluator, val logEval: TLogEvaluator) {
       Math.pow(Math.pow(trigEval.cos(x, eps), 2), 3)
 
   def posFunc(x: Double, eps: Double): Double =
-    ((logEval.log(x, 2, eps) - logEval.log(x, 5, eps)) * logEval.log(x, 5, eps)) +
-      (Math.pow(logEval.log(x, 3, eps), 3) + Math.pow(logEval.log(x, 10, eps), 3)) +
-      (logEval.log(x, 3, eps) * Math.pow(logEval.log(x, 3, eps), 3))
+    Math.pow(((logEval.log(x, 2, eps) - logEval.log(x, 5, eps)) * logEval.log(x, 5, eps)) +
+      (Math.pow(logEval.log(x, 3, eps), 3) + logEval.log(x, 10, eps)), 3) +
+      Math.pow(logEval.log(x, 3, eps) * logEval.log(x, 3, eps), 3)
 
   def writeCsvFile(filename: String, startX: Double, step: Double, endX: Double): Unit = {
     val pw = new PrintWriter(new File(filename))
     pw.write("x,res\n")
     var currX = startX
     while (currX < endX) {
-      pw.write(s"$currX,${func(currX,1E-4)}\n")
+      pw.write(s"$currX,${func(currX,1E-6)}\n")
       currX += step
     }
     pw.close()

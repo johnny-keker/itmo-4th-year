@@ -1,5 +1,7 @@
 package function
 
+import scala.annotation.tailrec
+
 trait TLog {
   def compute(x: Double, eps: Double): Double
 }
@@ -11,24 +13,14 @@ class Log extends TLog {
     case _ => log(x, eps)
   }
 
-  def log(x: Double, eps: Double): Double =
-    if (x < 1) {
-      val z = x - 1
-      lSmThOne(z, eps, z, z)
-    } else {
-      val z = x / (x - 1.0)
-      lBgThOne(z, eps, z, 0)
-    }
-
-  // x < 1
-  def lSmThOne(z: Double, eps: Double, term: Double, sum: Double, i: Double = 2): Double = {
-    if (Math.abs(term) < eps) return sum
-    lSmThOne(z, eps, term * -z, sum + term / i, i + 1)
+  def log(x: Double, eps: Double): Double = {
+    val num = (x - 1) / (x + 1)
+    l(num, eps, num, n = 3, 0)
   }
 
-  // x > 1
-  def lBgThOne(z: Double, eps: Double, term: Double, sum: Double, i: Double = 1): Double = {
-    if (Math.abs(term) < eps) return sum
-    lBgThOne(z, eps, 1.0 / (i * Math.pow(z, i)), sum + term, i + 1)
+  @tailrec
+  final def l(x1: Double, eps: Double, cur: Double, n: Double, res: Double): Double = {
+    if (Math.abs(cur) < eps) return res
+    l(x1, eps, cur * x1 * x1 / n * (n - 2), n + 2, res + 2 * cur)
   }
 }
