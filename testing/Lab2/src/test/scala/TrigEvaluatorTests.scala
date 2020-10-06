@@ -1,54 +1,56 @@
 import function._
-import org.scalactic.{Equality, TolerantNumerics}
-import org.scalamock.scalatest.MockFactory
-import org.scalatest.funsuite.AnyFunSuite
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions._
+import org.mockito.MockitoSugar._
+import org.mockito.Mockito.{ never, times, verify }
+import org.mockito.ArgumentMatchers._
 
-class TrigEvaluatorTests extends AnyFunSuite with MockFactory {
+class TrigEvaluatorTests {
   val epsilon = 1E-6
 
-  implicit val doubleEq: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(epsilon)
-
-  test("basic cos test") {
+  @Test
+  def basicCosTest(): Unit = {
     val sinMock = mock[TSinus]
-    (sinMock.compute _).expects(0.313 + Math.PI / 2, 1E-6).returning(Math.sin(0.313 + Math.PI / 2)).once()
+    when(sinMock.compute(0.313 + Math.PI / 2)).thenReturn(Math.sin(0.313 + Math.PI / 2))
 
     val trigEval = new TrigEvaluator(sinMock)
-    assert(trigEval.cos(0.313) === Math.cos(0.313), "cos should call sin(x + PI / 2)")
+    assertEquals(trigEval.cos(0.313), Math.cos(0.313), epsilon,
+      "cos should call sin(x + PI / 2)")
   }
 
-  test ("basic csc test") {
+  @Test
+  def basicCscTest(): Unit = {
     val sinMock = mock[TSinus]
-    (sinMock.compute _).expects(0.313, 1E-6).returning(Math.sin(0.313)).once()
+    when(sinMock.compute(0.313)).thenReturn(Math.sin(0.313))
 
     val trigEval = new TrigEvaluator(sinMock)
-    assert(trigEval.csc(0.313) === 1 / Math.sin(0.313), "csc should call 1 / sin(x)")
+    assertEquals(trigEval.csc(0.313), 1 / Math.sin(0.313), epsilon,
+      "csc should call 1 / sin(x)")
   }
 
-  test ("csc validation test") {
+  @Test
+  def cscValidationTest(): Unit = {
     val sinMock = mock[TSinus]
-    (sinMock.compute _).expects(0, 1E-6).returning(0).once()
-    (sinMock.compute _).expects(Double.NaN, 1E-6).returning(Double.NaN).once()
-    (sinMock.compute _).expects(Double.PositiveInfinity, 1E-6).returning(Double.NaN).once()
-    (sinMock.compute _).expects(Double.NegativeInfinity, 1E-6).returning(Double.NaN).once()
+    when(sinMock.compute(0)).thenReturn(0)
+    when(sinMock.compute(Double.NaN)).thenReturn(Double.NaN)
+    when(sinMock.compute(Double.PositiveInfinity)).thenReturn(Double.NaN)
+    when(sinMock.compute(Double.NegativeInfinity)).thenReturn(Double.NaN)
 
     val trigEval = new TrigEvaluator(sinMock)
-    assert(trigEval.csc(0).isNaN, "csc should check if sin(x) is 0 and return NaN if so")
-    assert(trigEval.csc(Double.NaN).isNaN, "csc(NaN) is NaN")
-    assert(trigEval.csc(Double.PositiveInfinity).isNaN, "csc(+inf) is NaN")
-    assert(trigEval.csc(Double.NegativeInfinity).isNaN, "csc(-inf) is NaN")
+    assertTrue(trigEval.csc(0).isNaN, "csc should check if sin(x) is 0 and return NaN if so")
+    assertTrue(trigEval.csc(Double.NaN).isNaN, "csc(NaN) is NaN")
+    assertTrue(trigEval.csc(Double.PositiveInfinity).isNaN, "csc(+inf) is NaN")
+    assertTrue(trigEval.csc(Double.NegativeInfinity).isNaN, "csc(-inf) is NaN")
   }
 
-  test ("cos validation test") {
+  @Test
+  def cosValidationTest(): Unit = {
     val sinMock = mock[TSinus]
-    (sinMock.compute _).expects(Double.NaN, 1E-6).returning(Double.NaN).once()
-    (sinMock.compute _).expects(Double.PositiveInfinity, 1E-6).returning(Double.NaN).once()
-    (sinMock.compute _).expects(Double.NegativeInfinity, 1E-6).returning(Double.NaN).once()
 
     val trigEval = new TrigEvaluator(sinMock)
-    assert(trigEval.cos(Double.NaN).isNaN, "cos(NaN) is NaN")
-    assert(trigEval.cos(Double.PositiveInfinity).isNaN, "cos(+inf) is NaN")
-    assert(trigEval.cos(Double.NegativeInfinity).isNaN, "cos(-inf) is NaN")
+    assertTrue(trigEval.cos(Double.NaN).isNaN, s"cos(NaN) is NaN")
+    assertTrue(trigEval.cos(Double.PositiveInfinity).isNaN, "cos(+inf) is NaN")
+    assertTrue(trigEval.cos(Double.NegativeInfinity).isNaN, "cos(-inf) is NaN")
   }
-
   // TODO: cos and csc integration testing
 }

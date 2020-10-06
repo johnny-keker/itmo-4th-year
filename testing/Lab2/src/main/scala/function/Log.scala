@@ -3,11 +3,11 @@ package function
 import scala.annotation.tailrec
 
 trait TLog {
-  def compute(x: Double, eps: Double): Double
+  def compute(x: Double, eps: Double = 1E-6): Double
 }
 
 class Log extends TLog {
-  def compute(x: Double, eps: Double): Double = if (x.isNaN) Double.NaN else x match {
+  def compute(x: Double, eps: Double = 1E-6): Double = if (x.isNaN) Double.NaN else x match {
     case Double.PositiveInfinity => Double.NaN
     case Double.NegativeInfinity => Double.NaN
     case _ => log(x, eps)

@@ -3,7 +3,7 @@ package function
 import scala.annotation.tailrec
 
 trait TSinus {
-  def compute(x: Double, eps: Double): Double
+  def compute(x: Double, eps: Double = 1E-6): Double
 }
 
 class Sinus extends TSinus {
