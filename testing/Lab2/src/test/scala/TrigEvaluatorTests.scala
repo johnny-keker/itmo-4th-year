@@ -8,8 +8,7 @@ import org.mockito.ArgumentMatchers._
 class TrigEvaluatorTests {
   val epsilon = 1E-6
 
-  @Test
-  def basicCosTest(): Unit = {
+  @Test def `basic cos test`(): Unit = {
     val sinMock = mock[TSinus]
     when(sinMock.compute(0.313 + Math.PI / 2)).thenReturn(Math.sin(0.313 + Math.PI / 2))
 
@@ -18,8 +17,7 @@ class TrigEvaluatorTests {
       "cos should call sin(x + PI / 2)")
   }
 
-  @Test
-  def basicCscTest(): Unit = {
+  @Test def `basic csc test`(): Unit = {
     val sinMock = mock[TSinus]
     when(sinMock.compute(0.313)).thenReturn(Math.sin(0.313))
 
@@ -28,8 +26,7 @@ class TrigEvaluatorTests {
       "csc should call 1 / sin(x)")
   }
 
-  @Test
-  def cscValidationTest(): Unit = {
+  @Test def `csc validation test`(): Unit = {
     val sinMock = mock[TSinus]
     when(sinMock.compute(0)).thenReturn(0)
     when(sinMock.compute(Double.NaN)).thenReturn(Double.NaN)
@@ -43,8 +40,7 @@ class TrigEvaluatorTests {
     assertTrue(trigEval.csc(Double.NegativeInfinity).isNaN, "csc(-inf) is NaN")
   }
 
-  @Test
-  def cosValidationTest(): Unit = {
+  @Test def `cos validation test`(): Unit = {
     val sinMock = mock[TSinus]
 
     val trigEval = new TrigEvaluator(sinMock)

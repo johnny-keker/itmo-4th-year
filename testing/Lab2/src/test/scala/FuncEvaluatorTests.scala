@@ -8,8 +8,7 @@ import org.mockito.ArgumentMatchers._
 class FuncEvaluatorTests {
   val epsilon = 1E-6
 
-  @Test
-  def negAreaBasicTest(): Unit = {
+  @Test def `negative area basic test`(): Unit = {
     val mockTrig = mock[TTrigEvaluator]
     when(mockTrig.sin(-0.313)).thenReturn(Math.sin(-0.313))
     when(mockTrig.cos(-0.313)).thenReturn(Math.cos(-0.313))
@@ -27,8 +26,7 @@ class FuncEvaluatorTests {
     verify(mockLog, never()).log(anyDouble(), anyDouble(), anyDouble())
   }
 
-  @Test
-  def posAreaBasicTest(): Unit = {
+  @Test def `positive area basic test`(): Unit = {
     val mockTrig = mock[TTrigEvaluator]
 
     val mockLog = mock[TLogEvaluator]
@@ -50,8 +48,7 @@ class FuncEvaluatorTests {
     verify(mockLog, times(1)).log(0.313, 10)
   }
 
-  @Test
-  def invalidParametersTest(): Unit = {
+  @Test def `invalid input parameters test`(): Unit = {
     val mockTrig = mock[TTrigEvaluator]
     val mockLog = mock[TLogEvaluator]
 
