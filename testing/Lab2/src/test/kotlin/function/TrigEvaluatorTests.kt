@@ -2,9 +2,14 @@ package function
 
 import org.mockito.Mockito.*
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvFileSource
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 class TrigEvaluatorTests {
     private val epsilon = 1E-6
@@ -52,5 +57,56 @@ class TrigEvaluatorTests {
         assertTrue(trigEval.cos(Double.POSITIVE_INFINITY).isNaN(), "cos(+inf) is NaN")
         assertTrue(trigEval.cos(Double.NEGATIVE_INFINITY).isNaN(), "cos(-inf) is NaN")
     }
-    // TODO: cos and csc integration testing
+
+    @Nested
+    inner class TrigIntegrationTests {
+        lateinit var sine: Sinus
+        lateinit var trigEval: TrigEvaluator
+
+        @BeforeEach
+        fun `init sine instance`() {
+            sine = Sinus()
+            trigEval = TrigEvaluator(sine)
+        }
+
+        @Test fun `cos ox intersection points test`() {
+            for (i in 1..7 step 2) {
+                assertEquals(0.0, trigEval.cos(Math.PI / 2 * i.toDouble()), epsilon, "cos(PI/2*$i) must be 0.0")
+                assertEquals(0.0, trigEval.cos(-Math.PI / 2 * i.toDouble()), epsilon, "cos(-PI/2*$i) must be 0.0")
+            }
+        }
+
+        @Test fun `cos extremum points test`() {
+            var expected = 1.0
+            for (i in 0..7) {
+                assertEquals(expected, trigEval.cos(Math.PI * i.toDouble()), epsilon, "cos(PI*$i) must be $expected")
+                expected *= -1
+            }
+        }
+
+        @Test fun `cos is periodic test`() {
+            var expected = 0.877583
+            for (i in 0..5) {
+                assertEquals(expected, trigEval.cos(0.5 + Math.PI * i), epsilon, "sin(0.5 + PI*${i}) must be $expected")
+                expected *= -1
+            }
+        }
+
+        /*
+         * lets divide sin function in 8 areas:
+         * 1. 0.0 - PI/4
+         * 2. PI/4 - PI/2
+         * 3. PI/2 - 3PI/4
+         * 4. 3PI/4 - PI
+         * 6. PI - 5PI/4
+         * 7. 5PI/4 - 3PI/2
+         * 8. 3PI/2 - 7PI/4
+         * 9. 4PI/4 - 2PI
+         */
+        @ParameterizedTest
+        @CsvFileSource(resources = ["/cos_equivalence_analysis.csv"], numLinesToSkip = 1)
+        fun `sine equivalence analysis`(x: Double, mes: String) {
+            assertEquals(cos(x), trigEval.cos(x), epsilon, mes)
+        }
+    }
 }

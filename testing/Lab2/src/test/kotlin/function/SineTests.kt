@@ -12,13 +12,16 @@ import kotlin.math.sqrt
 
 class SineTests {
     private val epsilon = 1E-6
-    val sine = Sinus()
-/*
-    @BeforeAll
-    fun `init sine instance`() {
-        sine = Sinus()
+
+    companion object {
+        lateinit var sine: Sinus
+        @BeforeAll
+        @JvmStatic
+        fun `init sine instance`() {
+            sine = Sinus()
+        }
     }
-*/
+
     @ParameterizedTest
     @CsvFileSource(resources = ["/sine_neg_cases.csv"], numLinesToSkip = 1)
     fun `negative sine cases`(x: Double, eps: Double, mes: String) {
