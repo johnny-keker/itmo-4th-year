@@ -12,7 +12,7 @@ class LnTests {
 
     @ParameterizedTest
     @CsvFileSource(resources = ["/ln_neg_cases.csv"], numLinesToSkip = 1)
-    fun `negative sine cases`(x: Double, eps: Double, mes: String) {
+    fun `negative ln cases`(x: Double, eps: Double, mes: String) {
         assertTrue(lnEval.compute(x, eps).isNaN(), mes)
     }
 

@@ -9,7 +9,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvFileSource
 import kotlin.math.cos
 import kotlin.math.sin
-import kotlin.math.sqrt
 
 class TrigEvaluatorTests {
     private val epsilon = 1E-6

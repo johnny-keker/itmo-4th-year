@@ -1,0 +1,12 @@
+x,base,eps,mes
+-1,0,1E-6,"log(-1) is NaN"
+NaN,0,1E-6,"log(NaN) is NaN"
+Infinity,0,1E-6,"log(+inf) is NaN"
+-Infinity,0,1E-6,"log(-inf) is NaN"
+0,0,NaN,"log is NaN if eps is NaN"
+0,0,Infinity,"log is NaN if eps is +inf"
+0,0,-Infinity,"log is NaN if eps is -inf"
+0,-1,1E-6,"log base -1 is NaN"
+0,NaN,1E-6,"log base NaN is NaN"
+0,Infinity,1E-6,"log base +inf is NaN"
+0,-Infinity,1E-6,"log base -inf is NaN"
