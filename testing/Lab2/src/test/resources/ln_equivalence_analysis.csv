@@ -1,0 +1,9 @@
+x,mes
+0.01,"1 area left edge"
+0.13,"1/2 area edge"
+1.0,"2/3 area edge"
+3.0,"3 area edge"
+0.07,"1 area center"
+0.565,"2 area center"
+2.0,"3 area center"
+50.0,"3 area to right sample"

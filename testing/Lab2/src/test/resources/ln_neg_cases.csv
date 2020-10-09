@@ -1,0 +1,7 @@
+x,eps,mes
+NaN,1E-6,"ln(NaN) is NaN"
+Infinity,1E-6,"ln(+inf) is NaN"
+-Infinity,1E-6,"ln(-inf) is NaN"
+0,NaN,"ln is NaN if eps is NaN"
+0,Infinity,"ln is NaN if eps is +inf"
+0,-Infinity,"ln is NaN if eps is -inf"

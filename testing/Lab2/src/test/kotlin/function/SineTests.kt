@@ -49,6 +49,16 @@ class SineTests {
         }
     }
 
+    /*
+     * lets divide sin function in 7 areas:
+     * 1. 0.0 - 0.8
+     * 2. 0.8 - PI/2
+     * 3. PI/2 - 2.3
+     * 4. 2.3 - PI
+     * 5. PI - 3.9
+     * 6. 3.9 - 5.5
+     * 7. 5.5 - 3PI/2
+     */
     @ParameterizedTest
     @CsvFileSource(resources = ["/sine_equivalence_analysis.csv"], numLinesToSkip = 1)
     fun `sine equivalence analysis`(x: Double, mes: String) {

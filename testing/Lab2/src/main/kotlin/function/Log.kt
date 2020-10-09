@@ -3,7 +3,7 @@ package function
 import kotlin.math.abs
 
 interface ILog {
-    fun compute(x: Double, eps: Double = 1E-6): Double
+    fun compute(x: Double, eps: Double = 1E-7): Double
 }
 
 class Log: ILog {

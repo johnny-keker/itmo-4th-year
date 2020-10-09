@@ -1,7 +1,7 @@
 package function
 
 interface ILogEvaluator {
-    fun log(x: Double, base: Double, eps: Double = 1E-6): Double
+    fun log(x: Double, base: Double, eps: Double = 1E-5): Double
 }
 
 class LogEvaluator(private val ln: ILog): ILogEvaluator {
