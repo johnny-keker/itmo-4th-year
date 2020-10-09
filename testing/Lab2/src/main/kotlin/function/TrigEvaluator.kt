@@ -14,7 +14,7 @@ class TrigEvaluator(private val sine: ISinus): ITrigEvaluator {
         else sine.compute(x + Math.PI / 2, eps)
 
     override fun csc(x: Double, eps: Double): Double {
-        val s = sine.compute(x, eps)
+        val s = sine.compute(x, eps / 100)
         if (s == 0.0 || s.isNaN() || s.isInfinite())
             return Double.NaN
         return 1 / s

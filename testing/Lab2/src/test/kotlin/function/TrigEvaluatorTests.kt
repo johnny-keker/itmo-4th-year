@@ -108,5 +108,34 @@ class TrigEvaluatorTests {
         fun `sine equivalence analysis`(x: Double, mes: String) {
             assertEquals(cos(x), trigEval.cos(x), epsilon, mes)
         }
+
+        @Test fun `csc extremum points test`() {
+            var expected = 1.0
+            for (i in 1..7 step 2) {
+                assertEquals(expected, trigEval.csc(Math.PI / 2 * i.toDouble()), epsilon, "csc(PI/2*$i) must be $expected")
+                expected *= -1
+            }
+        }
+
+        @Test fun `csc is periodic test`() {
+            var expected = 2.085829
+            for (i in 0..5) {
+                assertEquals(expected, trigEval.csc(0.5 + Math.PI * i), epsilon, "csc(0.5 + PI*${i}) must be $expected")
+                expected *= -1
+            }
+        }
+
+        /*
+         * lets divide csc function in 4 areas:
+         * 1. 0.1 - PI/2
+         * 2. PI/2 - PI-0.1
+         * 3. PI+0.1 - 3PI/2
+         * 4. 3PI/2 - 2PI-0.1
+         */
+        @ParameterizedTest
+        @CsvFileSource(resources = ["/csc_equivalence_analysis.csv"], numLinesToSkip = 1)
+        fun `csc equivalence analysis`(x: Double, mes: String) {
+            assertEquals(1/sin(x), trigEval.csc(x), epsilon, mes)
+        }
     }
 }
