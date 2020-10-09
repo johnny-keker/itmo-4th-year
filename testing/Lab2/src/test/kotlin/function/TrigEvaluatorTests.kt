@@ -11,7 +11,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class TrigEvaluatorTests {
-    private val epsilon = 1E-6
+    private val epsilon = 1E-5
 
     @Test fun `basic cos test`() {
         val sinMock = mock(ISinus::class.java).apply {
@@ -25,11 +25,11 @@ class TrigEvaluatorTests {
 
     @Test fun `basic csc test`() {
         val sinMock = mock(ISinus::class.java).apply {
-            `when`(compute(0.313)).thenReturn(sin(0.313))
+            `when`(compute(0.313, 1E-5/100)).thenReturn(sin(0.313))
         }
 
         val trigEval = TrigEvaluator(sinMock)
-        assertEquals(trigEval.csc(0.313), 1 / sin(0.313), epsilon,
+        assertEquals(1 / sin(0.313), trigEval.csc(0.313), epsilon,
             "csc should call 1 / sin(x)")
     }
 

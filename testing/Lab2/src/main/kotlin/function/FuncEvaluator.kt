@@ -5,7 +5,7 @@ import java.io.PrintWriter
 import java.io.File
 
 class FuncEvaluator(private val trigEval: ITrigEvaluator, private val logEval: ILogEvaluator) {
-    fun func(x: Double, eps: Double = 1E-6): Double =
+    fun func(x: Double, eps: Double = 1E-5): Double =
         if (x.isNaN() || x.isInfinite() || eps.isNaN() || eps.isInfinite()) Double.NaN
         else if (x > 0) posFunc(x, eps) else negFunc(x, eps)
 

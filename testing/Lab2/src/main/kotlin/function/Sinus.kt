@@ -3,7 +3,7 @@ package function
 import kotlin.math.abs
 
 interface ISinus {
-    fun compute(x: Double, eps: Double = 1E-6): Double
+    fun compute(x: Double, eps: Double = 1E-5): Double
 }
 
 class Sinus: ISinus {

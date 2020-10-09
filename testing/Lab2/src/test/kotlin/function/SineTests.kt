@@ -11,7 +11,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 class SineTests {
-    private val epsilon = 1E-6
+    private val epsilon = 1E-5
 
     companion object {
         lateinit var sine: Sinus

@@ -1,9 +1,9 @@
 package function
 
 interface ITrigEvaluator {
-    fun sin(x: Double, eps: Double = 1E-6): Double
-    fun cos(x: Double, eps: Double = 1E-6): Double
-    fun csc(x: Double, eps: Double = 1E-6): Double
+    fun sin(x: Double, eps: Double = 1E-5): Double
+    fun cos(x: Double, eps: Double = 1E-5): Double
+    fun csc(x: Double, eps: Double = 1E-5): Double
 }
 
 class TrigEvaluator(private val sine: ISinus): ITrigEvaluator {
