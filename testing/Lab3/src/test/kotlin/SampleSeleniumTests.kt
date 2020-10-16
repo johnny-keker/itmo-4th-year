@@ -1,24 +1,15 @@
 import webpages.*
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.chrome.ChromeDriver
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ArgumentsSource
+import org.openqa.selenium.WebDriver
 
 class SampleSeleniumTests {
-    @Test
-    fun `sample fox test`() {
-        val fireDriver = FirefoxDriver()
-        val mainPage = MainPage(fireDriver)
-        assertTrue(mainPage.infoBlock.text.contains(
-            "На сайте представлено невероятное количество классических и современных кинолент мирового и отечественного кинематографа")
-        )
-    }
-
-    @Test
-    fun `sample chrome test`() {
-        val chromeDriver = ChromeDriver()
-        val mainPage = MainPage(chromeDriver)
+    @ParameterizedTest
+    @ArgumentsSource(DriverProvider::class)
+    fun `sample test`(driver: WebDriver) {
+        val mainPage = MainPage(driver)
         assertTrue(mainPage.infoBlock.text.contains(
             "На сайте представлено невероятное количество классических и современных кинолент мирового и отечественного кинематографа")
         )
