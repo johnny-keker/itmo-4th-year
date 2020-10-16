@@ -14,4 +14,20 @@ class SampleSeleniumTests {
             "На сайте представлено невероятное количество классических и современных кинолент мирового и отечественного кинематографа")
         )
     }
+
+    @ParameterizedTest
+    @ArgumentsSource(DriverProvider::class)
+    fun `authorization test`(driver: WebDriver) {
+        val mainPage = MainPage(driver)
+        assertTrue(mainPage.loginInput.isDisplayed)
+        assertTrue(mainPage.passwordInput.isDisplayed)
+        assertTrue(mainPage.loginButton.isDisplayed)
+
+        mainPage.loginInput.sendKeys(Credentials.login)
+        mainPage.passwordInput.sendKeys(Credentials.password)
+        mainPage.loginButton.click()
+
+        assertTrue(mainPage.username.isDisplayed)
+        assertEquals(Credentials.login, mainPage.username.text)
+    }
 }

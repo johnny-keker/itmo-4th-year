@@ -15,6 +15,12 @@ class MainPage(private val driver: WebDriver) {
     @FindBy(xpath = "//input[@name='password']")
     lateinit var passwordInput: WebElement
 
+    @FindBy(xpath = "//input[@value='Вход']")
+    lateinit var loginButton: WebElement
+
+    @FindBy(xpath = "//li[@class='tp2 center b']/a[@class='u0']")
+    lateinit var username: WebElement
+
     init {
         driver.get("http://kinozal.tv/")
         PageFactory.initElements(driver, this)
