@@ -13,6 +13,7 @@ class SampleSeleniumTests {
         assertTrue(mainPage.infoBlock.text.contains(
             "На сайте представлено невероятное количество классических и современных кинолент мирового и отечественного кинематографа")
         )
+        driver.quit()
     }
 
     @ParameterizedTest
@@ -29,5 +30,7 @@ class SampleSeleniumTests {
 
         assertTrue(mainPage.username.isDisplayed)
         assertEquals(Credentials.login, mainPage.username.text)
+
+        driver.quit()
     }
 }
