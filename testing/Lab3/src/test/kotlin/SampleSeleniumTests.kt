@@ -58,5 +58,7 @@ class SampleSeleniumTests {
             val queryRes = driver.findElement(By.xpath("$queryResultsXPath[${i+1}]")).text
             assertEquals(sampleQueryResults[i], queryRes)
         }
+
+        driver.quit()
     }
 }
