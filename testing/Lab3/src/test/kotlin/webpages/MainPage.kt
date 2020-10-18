@@ -33,6 +33,12 @@ class MainPage(private val driver: WebDriver) {
     @FindBy(xpath = "(//div[@class='bx1']/div[@class='red'])[1]")
     lateinit var invalidPasswordError: WebElement
 
+    @FindBy(xpath = "//a[@class='sbab' and @href='']")
+    lateinit var showRatingButton: WebElement
+
+    @FindBy(xpath = "//td[@class='f10 right green']")
+    lateinit var ratingInfo: WebElement
+
     init {
         driver.get("http://kinozal.tv/")
         PageFactory.initElements(driver, this)

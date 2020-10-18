@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.support.ui.ExpectedConditions.*
+import org.openqa.selenium.support.ui.WebDriverWait
 
 class SampleSeleniumTests {
     private val queryResultsXPath = "(//table[@class='t_peer w100p']/tbody/tr[@class='first bg' or @class='bg']/td[@class='nam'])"
@@ -59,6 +61,24 @@ class SampleSeleniumTests {
         assertTrue(mainPage.invalidPasswordError.isDisplayed)
         assertEquals("Неверно указан пароль для имени « ${Credentials.login} »",
             mainPage.invalidPasswordError.text)
+
+        driver.quit()
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(DriverProvider::class)
+    fun `check rating test`(driver: WebDriver) {
+        val mainPage = MainPage(driver)
+
+        mainPage.loginInput.sendKeys(Credentials.login)
+        mainPage.passwordInput.sendKeys(Credentials.password)
+        mainPage.loginButton.click()
+
+        assertTrue(mainPage.showRatingButton.isDisplayed)
+        mainPage.showRatingButton.click()
+
+        WebDriverWait(driver, 2).until(visibilityOf(mainPage.ratingInfo))
+        assertEquals("Рейтинг: ---\nЗалил: 0 КБ\nСкачал: 0 КБ", mainPage.ratingInfo.text)
 
         driver.quit()
     }
