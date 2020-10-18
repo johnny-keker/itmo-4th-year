@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.AfterEach
 import webpages.*
 import utils.*
 
@@ -14,7 +13,7 @@ class TorrentPageTests {
     @ArgumentsSource(DriverProvider::class)
     @CustomCsvProvider("sort.csv")
     fun `sort tests`(driver: WebDriver, sortBy: SortBy, sortType: SortType,
-                             _f: FilterBy, _s: Status, _sMin: Double, _sMax: Double) {
+                             _f: FilterBy, _s: Status, _sMin: Int, _sMax: Int) {
         val torrentPage = TorrentPage(driver)
 
         torrentPage.sortBySelect.selectByIndex(TorrentUtils.getSelectIndexBySortBy(sortBy))
@@ -35,6 +34,32 @@ class TorrentPageTests {
                     torrents[it].getParameterBySortBy(sortBy) <= torrents[it + 1].getParameterBySortBy(sortBy)
                 }
             )
+        }
+
+        driver.quit()
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(DriverProvider::class)
+    @CustomCsvProvider("filter.csv")
+    fun `filter tests`(driver: WebDriver, _sB: SortBy, _sT: SortType,
+                     filterBy: FilterBy, status: Status, sizeMin: Long, sizeMax: Long) {
+        val torrentPage = TorrentPage(driver)
+
+        torrentPage.filterBySelect.selectByIndex(TorrentUtils.getSelectIndexByFilterBy(filterBy))
+        torrentPage.searchButton.click()
+
+        val torrents = torrentPage.getResults()
+        assertFalse(torrents.isEmpty(), "result list cannot be empty")
+
+        when (filterBy) {
+            FilterBy.SIZE_LESS_13, FilterBy.SIZE_13_22, FilterBy.SIZE_22_40,
+                FilterBy.SIZE_40_95, FilterBy.SIZE_MORE_95 -> assertTrue(
+                    torrents.all { it.sizeKb >= sizeMin && (it.sizeKb <= sizeMax || sizeMax == 0.toLong()) },
+                    "expected sizes to be between $sizeMin and $sizeMax, but there is " +
+                            "${torrents.find { it.sizeKb < sizeMin || it.sizeKb > sizeMax }?.sizeKb}Kb torrent."
+                )
+            else -> assertTrue(true)
         }
 
         driver.quit()

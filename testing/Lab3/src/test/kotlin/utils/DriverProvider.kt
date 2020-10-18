@@ -27,8 +27,8 @@ class DriverProvider: ArgumentsProvider {
                     enumValueOf<SortType>(x[1]),
                     enumValueOf<FilterBy>(x[2]),
                     enumValueOf<Status>(x[3]),
-                    x[4].toDouble(),
-                    x[5].toDouble()
+                    x[4].toLong(),
+                    x[5].toLong()
                 )
             },
             data.stream().filter { !it.startsWith("//") }.map {
@@ -39,8 +39,8 @@ class DriverProvider: ArgumentsProvider {
                     enumValueOf<SortType>(x[1]),
                     enumValueOf<FilterBy>(x[2]),
                     enumValueOf<Status>(x[3]),
-                    x[4].toDouble(),
-                    x[5].toDouble()
+                    x[4].toLong(),
+                    x[5].toLong()
                 )
             }
         )
