@@ -26,9 +26,15 @@ class TorrentPageTests {
 
         when (sortType) {
             SortType.DESC -> assertTrue(
-                IntStream.range(0, torrents.size - 1).noneMatch { torrents[it].sizeMb < torrents[it + 1].sizeMb })
+                IntStream.range(0, torrents.size - 1).noneMatch {
+                    torrents[it].getParameterBySortBy(sortBy) < torrents[it + 1].getParameterBySortBy(sortBy)
+                }
+            )
             else -> assertTrue(
-                IntStream.range(0, torrents.size - 1).noneMatch { torrents[it].sizeMb > torrents[it + 1].sizeMb })
+                IntStream.range(0, torrents.size - 1).noneMatch {
+                    torrents[it].getParameterBySortBy(sortBy) > torrents[it + 1].getParameterBySortBy(sortBy)
+                }
+            )
         }
 
         driver.quit()

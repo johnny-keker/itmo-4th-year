@@ -2,12 +2,22 @@ package utils
 
 data class TorrentInfo (
     var name: String,
-    var sizeMb: Double,
+    var sizeKb: Int,
     var seeds: Int,
     var peers: Int,
     var status: Status,
-    var comments: Int
-)
+    var comments: Int,
+    var date: Int
+) {
+    fun getParameterBySortBy(sortBy: SortBy): Int = when (sortBy) {
+        SortBy.SIZE -> sizeKb
+        SortBy.SEED -> seeds
+        SortBy.PEER -> peers
+        SortBy.COMM -> comments
+        SortBy.DATE -> date
+        else -> 0
+    }
+}
 
 enum class SortBy {
     SIZE, SEED, PEER, COMM, DATE, NONE
