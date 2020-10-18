@@ -7,7 +7,12 @@ data class TorrentInfo (
     var peers: Long,
     var status: Status,
     var comments: Long,
-    var date: Long
+    var date: Long,
+    var changedToday: Boolean,
+    var changedYesterday: Boolean,
+    var changerLastThreeDays: Boolean,
+    var changedLastWeek: Boolean,
+    var changedLastMonth: Boolean
 ) {
     fun getParameterBySortBy(sortBy: SortBy): Long = when (sortBy) {
         SortBy.SIZE -> sizeKb

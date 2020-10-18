@@ -61,6 +61,11 @@ class TorrentPageTests {
                 )
             FilterBy.STATUS_GOLD -> assertTrue(torrents.all { it.status == Status.GOLD })
             FilterBy.STATUS_SILVER -> assertTrue(torrents.all { it.status == Status.SILVER })
+            FilterBy.DATE_TODAY -> assertTrue(torrents.all { it.changedToday })
+            FilterBy.DATE_YESTERDAY -> assertTrue(torrents.all { it.changedYesterday })
+            FilterBy.DATE_LAST_3_DAYS -> assertTrue(torrents.all { it.changerLastThreeDays })
+            FilterBy.DATE_LAST_WEEK -> assertTrue(torrents.all { it.changedLastWeek })
+            FilterBy.DATE_LAST_MONTH -> assertTrue(torrents.all { it.changedLastMonth })
             else -> fail("unknown filter - $filterBy")
         }
 
