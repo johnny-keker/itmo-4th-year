@@ -52,8 +52,7 @@ class TorrentPage(private val driver: WebDriver) {
                 comments = it.findElement(By.xpath("(.//td[@class='s'])[1]")).text.toLong(),
                 peers = it.findElement(By.xpath("(.//td[@class='sl_p'])")).text.toLong(),
                 seeds = it.findElement(By.xpath("(.//td[@class='sl_s'])")).text.toLong(),
-                // todo: implement
-                status = Status.NONE,
+                status = getStatus(it.findElement(By.xpath(".//td[@class='nam']/a"))),
                 date = convertStringTimeToMinutes(it.findElement(By.xpath("(.//td[@class='s'])[3]")).text)
             )
         }.toTypedArray()
@@ -84,7 +83,7 @@ class TorrentPage(private val driver: WebDriver) {
                 day = SimpleDateFormat("dd").format(today).toLong()
             }
             datetime.contains("вчера в") -> {
-                val yesterday = Instant.now().minus(1, ChronoUnit.DAYS)
+                val yesterday = Date.from(Instant.now().minus(1, ChronoUnit.DAYS))
                 year = SimpleDateFormat("YYYY").format(yesterday).toLong()
                 month = SimpleDateFormat("MM").format(yesterday).toLong()
                 day = SimpleDateFormat("dd").format(yesterday).toLong()
@@ -102,5 +101,14 @@ class TorrentPage(private val driver: WebDriver) {
         val h = time[0].toInt()
         val m = time[1].toInt()
         return (year - 1970) * 525600 + month * 43800 + day * 1440 + h * 60 + m
+    }
+
+    private fun getStatus(nameLink: WebElement): Status {
+        val classes = nameLink.getAttribute("class").split(" ")
+        return when {
+            classes.contains("r1") -> Status.GOLD
+            classes.contains("r2") -> Status.SILVER
+            else -> Status.NONE
+        }
     }
 }

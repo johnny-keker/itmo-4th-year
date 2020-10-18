@@ -59,7 +59,9 @@ class TorrentPageTests {
                     "expected sizes to be between $sizeMin and $sizeMax, but there is " +
                             "${torrents.find { it.sizeKb < sizeMin || it.sizeKb > sizeMax }?.sizeKb}Kb torrent."
                 )
-            else -> assertTrue(true)
+            FilterBy.STATUS_GOLD -> assertTrue(torrents.all { it.status == Status.GOLD })
+            FilterBy.STATUS_SILVER -> assertTrue(torrents.all { it.status == Status.SILVER })
+            else -> fail("unknown filter - $filterBy")
         }
 
         driver.quit()
