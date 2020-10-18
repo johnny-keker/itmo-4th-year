@@ -12,8 +12,8 @@ class TorrentPageTests {
 
     @ParameterizedTest
     @ArgumentsSource(DriverProvider::class)
-    @CustomCsvProvider("sort_by_size.csv")
-    fun `sort by size tests`(driver: WebDriver, sortBy: SortBy, sortType: SortType,
+    @CustomCsvProvider("sort.csv")
+    fun `sort tests`(driver: WebDriver, sortBy: SortBy, sortType: SortType,
                              _f: FilterBy, _s: Status, _sMin: Double, _sMax: Double) {
         val torrentPage = TorrentPage(driver)
 
@@ -26,13 +26,13 @@ class TorrentPageTests {
 
         when (sortType) {
             SortType.DESC -> assertTrue(
-                IntStream.range(0, torrents.size - 1).noneMatch {
-                    torrents[it].getParameterBySortBy(sortBy) < torrents[it + 1].getParameterBySortBy(sortBy)
+                IntStream.range(0, torrents.size - 1).allMatch {
+                    torrents[it].getParameterBySortBy(sortBy) >= torrents[it + 1].getParameterBySortBy(sortBy)
                 }
             )
             else -> assertTrue(
-                IntStream.range(0, torrents.size - 1).noneMatch {
-                    torrents[it].getParameterBySortBy(sortBy) > torrents[it + 1].getParameterBySortBy(sortBy)
+                IntStream.range(0, torrents.size - 1).allMatch {
+                    torrents[it].getParameterBySortBy(sortBy) <= torrents[it + 1].getParameterBySortBy(sortBy)
                 }
             )
         }
