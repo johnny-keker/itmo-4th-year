@@ -1,3 +1,5 @@
+package utils
+
 class Credentials {
     companion object {
         val login: String

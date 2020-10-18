@@ -1,14 +1,14 @@
 import webpages.*
+import utils.*
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
-import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.*
 import org.openqa.selenium.support.ui.WebDriverWait
 
-class SampleSeleniumTests {
+class MainPageTests {
 
     @ParameterizedTest
     @ArgumentsSource(DriverProvider::class)
