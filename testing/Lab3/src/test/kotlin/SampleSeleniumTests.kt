@@ -32,15 +32,8 @@ class SampleSeleniumTests {
     @ArgumentsSource(DriverProvider::class)
     fun `positive authorization test`(driver: WebDriver) {
         val mainPage = MainPage(driver)
-        assertTrue(mainPage.loginInput.isDisplayed)
-        assertTrue(mainPage.passwordInput.isDisplayed)
-        assertTrue(mainPage.loginButton.isDisplayed)
 
-        mainPage.loginInput.sendKeys(Credentials.login)
-        mainPage.passwordInput.sendKeys(Credentials.password)
-        mainPage.loginButton.click()
-
-        assertTrue(mainPage.username.isDisplayed)
+        mainPage.login(Credentials.login, Credentials.password)
         assertEquals(Credentials.login, mainPage.username.text)
 
         driver.quit()
@@ -50,15 +43,8 @@ class SampleSeleniumTests {
     @ArgumentsSource(DriverProvider::class)
     fun `negative authorization test`(driver: WebDriver) {
         val mainPage = MainPage(driver)
-        assertTrue(mainPage.loginInput.isDisplayed)
-        assertTrue(mainPage.passwordInput.isDisplayed)
-        assertTrue(mainPage.loginButton.isDisplayed)
 
-        mainPage.loginInput.sendKeys(Credentials.login)
-        mainPage.passwordInput.sendKeys(Credentials.wrongPassword)
-        mainPage.loginButton.click()
-
-        assertTrue(mainPage.invalidPasswordError.isDisplayed)
+        mainPage.login(Credentials.login, Credentials.wrongPassword)
         assertEquals("Неверно указан пароль для имени « ${Credentials.login} »",
             mainPage.invalidPasswordError.text)
 
@@ -70,11 +56,7 @@ class SampleSeleniumTests {
     fun `check rating test`(driver: WebDriver) {
         val mainPage = MainPage(driver)
 
-        mainPage.loginInput.sendKeys(Credentials.login)
-        mainPage.passwordInput.sendKeys(Credentials.password)
-        mainPage.loginButton.click()
-
-        assertTrue(mainPage.showRatingButton.isDisplayed)
+        mainPage.login(Credentials.login, Credentials.password)
         mainPage.showRatingButton.click()
 
         WebDriverWait(driver, 2).until(visibilityOf(mainPage.ratingInfo))

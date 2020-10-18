@@ -4,6 +4,8 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
+import org.openqa.selenium.support.ui.ExpectedConditions.*
+import org.openqa.selenium.support.ui.WebDriverWait
 
 class MainPage(private val driver: WebDriver) {
     @FindBy(xpath = "//ul/li[@class='justify']")
@@ -42,5 +44,16 @@ class MainPage(private val driver: WebDriver) {
     init {
         driver.get("http://kinozal.tv/")
         PageFactory.initElements(driver, this)
+    }
+
+    fun login(login: String, password: String) {
+        loginInput.sendKeys(login)
+        passwordInput.sendKeys(password)
+        loginButton.click()
+
+        WebDriverWait(driver, 5).until(or(
+            visibilityOf(username),
+            visibilityOf(invalidPasswordError)
+        ))
     }
 }
