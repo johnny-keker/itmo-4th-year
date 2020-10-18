@@ -12,9 +12,14 @@ import org.openqa.selenium.support.ui.WebDriverWait
 class TorrentPageTests {
     @ParameterizedTest
     @ArgumentsSource(DriverProvider::class)
-    @CustomCsvProvider("test")
-    fun sample(driver: WebDriver, path: String) {
-        assertEquals("test", path)
+    //@CustomCsvProvider("test")
+    fun sample(driver: WebDriver/*, path: String*/) {
+        val torrentPage = TorrentPage(driver)
+
+        val torrents = torrentPage.getResults()
+
+        assertEquals(50, torrents.size)
+        assertEquals(2260, torrents[0].sizeMb)
     }
 
 }

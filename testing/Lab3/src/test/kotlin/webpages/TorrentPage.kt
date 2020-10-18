@@ -1,5 +1,7 @@
 package webpages
 
+import utils.*
+
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -7,43 +9,40 @@ import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import org.openqa.selenium.support.ui.ExpectedConditions.*
 import org.openqa.selenium.support.ui.WebDriverWait
-
-data class TorrentInfo (
-    var name: String,
-    var sizeMb: Double,
-    var seeds: Int,
-    var peers: Int,
-    var status: Status,
-    var comments: Int
-)
-
-enum class SortBy {
-    SIZE, SEED, PEER, COMM, NONE
-}
-
-enum class SortType {
-    ASC, DESC, NONE
-}
-
-enum class FilterBy {
-    SIZE_LESS_13,
-    SIZE_13_22,
-    SIZE_22_40,
-    SIZE_40_95,
-    SIZE_MORE_95,
-    STATUS_GOLD,
-    STATUS_SILVER,
-    DATE_TODAY,
-    DATE_YESTERDAY,
-    DATE_LAST_3_DAYS,
-    DATE_LAST_WEEK,
-    DATE_LAST_MONTH
-}
-
-enum class Status {
-    GOLD, SILVER, NONE
-}
+import kotlin.math.pow
 
 class TorrentPage(private val driver: WebDriver) {
+    private val queryResultXPath = "(//table[@class='t_peer w100p']/tbody/tr[@class='first bg' or @class='bg'])"
 
+    fun getResults(): Array<TorrentInfo> {
+        val qResults = driver.findElements(By.xpath(queryResultXPath))
+        return qResults.map {
+            TorrentInfo(
+                name = it.findElement(By.xpath(".//td[@class='nam']")).text,
+                sizeMb = convertSizeToMb(it.findElement(By.xpath("(.//td[@class='s'])[2]")).text),
+                // todo: implement
+                comments = 0,
+                peers = 0,
+                seeds = 0,
+                status = Status.NONE
+            )
+        }.toTypedArray()
+    }
+
+    private fun convertSizeToMb(size: String): Double {
+        val ext = size.takeLast(2)
+        val value = size.filter { it.isDigit() || it == '.' }.toDouble()
+
+        return when (ext) {
+            "КБ" -> value / 1000.0
+            "ГБ" -> value * 1000.0
+            "ТБ" -> value * 10.0.pow(9.0)
+            else -> value
+        }
+    }
+
+    init {
+        driver.get("http://kinozal.tv/browse.php")
+        PageFactory.initElements(driver, this)
+    }
 }
