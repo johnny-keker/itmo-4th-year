@@ -8,8 +8,6 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import org.openqa.selenium.support.ui.Select
-import org.openqa.selenium.support.ui.ExpectedConditions.*
-import org.openqa.selenium.support.ui.WebDriverWait
 import kotlin.math.pow
 
 class TorrentPage(private val driver: WebDriver) {
@@ -21,8 +19,8 @@ class TorrentPage(private val driver: WebDriver) {
     @FindBy(xpath = "//select[@name='f']")
     lateinit var sortModeSelectElement: WebElement
 
-    lateinit var sortBySelect: Select
-    lateinit var sortModeSelect: Select
+    var sortBySelect: Select
+    var sortModeSelect: Select
 
     @FindBy(xpath = "//input[@class='buttonS w98p']")
     lateinit var searchButton: WebElement

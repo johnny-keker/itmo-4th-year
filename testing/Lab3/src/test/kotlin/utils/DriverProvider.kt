@@ -8,20 +8,41 @@ import org.openqa.selenium.chrome.ChromeDriver
 import java.util.stream.Stream
 
 class DriverProvider: ArgumentsProvider {
-    private val fireDriver = FirefoxDriver()
-    private val chromeDriver = ChromeDriver()
-
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> {
         if (!context!!.element.get().isAnnotationPresent(CustomCsvProvider::class.java))
          return Stream.of(
-                Arguments.of(fireDriver),
-                Arguments.of(chromeDriver)
+                Arguments.of(FirefoxDriver()),
+                Arguments.of(ChromeDriver())
             )
 
-        val csvPath = context!!.element.get().getAnnotation(CustomCsvProvider::class.java).path
-        return Stream.of(
-            Arguments.of(fireDriver, csvPath),
-            Arguments.of(chromeDriver, csvPath)
+        val csvPath = context.element.get().getAnnotation(CustomCsvProvider::class.java).path
+        val data = DriverProvider::class.java.getResource("/$csvPath").readText().split("\r\n").drop(1)
+
+        return Stream.concat(
+            data.map {
+                val x = it.split(",")
+                Arguments.of(
+                    FirefoxDriver(),
+                    enumValueOf<SortBy>(x[0]),
+                    enumValueOf<SortType>(x[1]),
+                    enumValueOf<FilterBy>(x[2]),
+                    enumValueOf<Status>(x[3]),
+                    x[4].toDouble(),
+                    x[5].toDouble()
+                )
+            }.stream(),
+            data.map {
+                val x = it.split(",")
+                Arguments.of(
+                    ChromeDriver(),
+                    enumValueOf<SortBy>(x[0]),
+                    enumValueOf<SortType>(x[1]),
+                    enumValueOf<FilterBy>(x[2]),
+                    enumValueOf<Status>(x[3]),
+                    x[4].toDouble(),
+                    x[5].toDouble()
+                )
+            }.stream()
         )
     }
 }
