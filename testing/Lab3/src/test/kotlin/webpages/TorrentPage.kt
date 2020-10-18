@@ -78,10 +78,11 @@ class TorrentPage(private val driver: WebDriver) {
                 day = SimpleDateFormat("dd").format(yesterday).toInt()
             }
             else -> {
-                val date = SimpleDateFormat("dd.MM.YYYY в HH:mm")
-                year = SimpleDateFormat("YYYY").format(date).toInt()
-                month = SimpleDateFormat("MM").format(date).toInt()
-                day = SimpleDateFormat("dd").format(date).toInt()
+                val regex = """(\d+)\.(\d+)\.(\d+) в \d+:\d+""".toRegex()
+                val matchResult = regex.find(datetime)
+                year = matchResult!!.destructured.component3().toInt()
+                month = matchResult!!.destructured.component2().toInt()
+                day = matchResult!!.destructured.component1().toInt()
             }
         }
 
