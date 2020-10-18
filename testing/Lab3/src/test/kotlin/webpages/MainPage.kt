@@ -1,5 +1,6 @@
 package webpages
 
+import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
@@ -8,6 +9,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions.*
 import org.openqa.selenium.support.ui.WebDriverWait
 
 class MainPage(private val driver: WebDriver) {
+    private val queryResultNamesXPath =
+        "//table[@class='t_peer w100p']/tbody/tr[@class='first bg' or @class='bg']/td[@class='nam']"
+
     @FindBy(xpath = "//ul/li[@class='justify']")
     lateinit var infoBlock: WebElement
 
@@ -55,5 +59,15 @@ class MainPage(private val driver: WebDriver) {
             visibilityOf(username),
             visibilityOf(invalidPasswordError)
         ))
+    }
+
+    fun validateSearchResult(query: String, expectedResultFilePath: String): Boolean {
+        val expected = MainPage::class.java.getResource("/$expectedResultFilePath").readText().split("\r\n")
+
+        searchInput.sendKeys(query)
+        searchButton.click()
+
+        val actualResult = driver.findElements(By.xpath(queryResultNamesXPath))
+        return actualResult.map { it.text }.containsAll(expected)
     }
 }
