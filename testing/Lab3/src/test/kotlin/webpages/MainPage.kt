@@ -30,6 +30,8 @@ class MainPage(private val driver: WebDriver) {
     @FindBy(xpath = "//input[@class='s_submit']")
     lateinit var searchButton: WebElement
 
+    @FindBy(xpath = "(//div[@class='bx1']/div[@class='red'])[1]")
+    lateinit var invalidPasswordError: WebElement
 
     init {
         driver.get("http://kinozal.tv/")

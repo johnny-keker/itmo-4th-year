@@ -28,7 +28,7 @@ class SampleSeleniumTests {
 
     @ParameterizedTest
     @ArgumentsSource(DriverProvider::class)
-    fun `authorization test`(driver: WebDriver) {
+    fun `positive authorization test`(driver: WebDriver) {
         val mainPage = MainPage(driver)
         assertTrue(mainPage.loginInput.isDisplayed)
         assertTrue(mainPage.passwordInput.isDisplayed)
@@ -40,6 +40,25 @@ class SampleSeleniumTests {
 
         assertTrue(mainPage.username.isDisplayed)
         assertEquals(Credentials.login, mainPage.username.text)
+
+        driver.quit()
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(DriverProvider::class)
+    fun `negative authorization test`(driver: WebDriver) {
+        val mainPage = MainPage(driver)
+        assertTrue(mainPage.loginInput.isDisplayed)
+        assertTrue(mainPage.passwordInput.isDisplayed)
+        assertTrue(mainPage.loginButton.isDisplayed)
+
+        mainPage.loginInput.sendKeys(Credentials.login)
+        mainPage.passwordInput.sendKeys(Credentials.wrongPassword)
+        mainPage.loginButton.click()
+
+        assertTrue(mainPage.invalidPasswordError.isDisplayed)
+        assertEquals("Неверно указан пароль для имени « ${Credentials.login} »",
+            mainPage.invalidPasswordError.text)
 
         driver.quit()
     }
