@@ -19,7 +19,7 @@ class DriverProvider: ArgumentsProvider {
         val data = DriverProvider::class.java.getResource("/$csvPath").readText().split("\r\n").drop(1)
 
         return Stream.concat(
-            data.filter { !it.startsWith("//") }.map {
+            data.stream().filter { !it.startsWith("//") }.map {
                 val x = it.split(",")
                 Arguments.of(
                     FirefoxDriver(),
@@ -30,8 +30,8 @@ class DriverProvider: ArgumentsProvider {
                     x[4].toDouble(),
                     x[5].toDouble()
                 )
-            }.stream(),
-            data.filter { !it.startsWith("//") }.map {
+            },
+            data.stream().filter { !it.startsWith("//") }.map {
                 val x = it.split(",")
                 Arguments.of(
                     ChromeDriver(),
@@ -42,7 +42,7 @@ class DriverProvider: ArgumentsProvider {
                     x[4].toDouble(),
                     x[5].toDouble()
                 )
-            }.stream()
+            }
         )
     }
 }
