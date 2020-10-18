@@ -13,7 +13,7 @@ class TorrentPageTests {
     @ArgumentsSource(DriverProvider::class)
     @CustomCsvProvider("sort.csv")
     fun `sort tests`(driver: WebDriver, sortBy: SortBy, sortType: SortType,
-                             _f: FilterBy, _s: Status, _sMin: Int, _sMax: Int) {
+                             _f: FilterBy, _s: Status, _sMin: Long, _sMax: Long) {
         val torrentPage = TorrentPage(driver)
 
         torrentPage.sortBySelect.selectByIndex(TorrentUtils.getSelectIndexBySortBy(sortBy))
