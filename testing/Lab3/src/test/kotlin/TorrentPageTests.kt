@@ -7,7 +7,9 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 import org.junit.jupiter.params.provider.CsvFileSource
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.*
+import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
+import java.util.stream.IntStream
 
 class TorrentPageTests {
     @ParameterizedTest
@@ -16,10 +18,14 @@ class TorrentPageTests {
     fun sample(driver: WebDriver/*, path: String*/) {
         val torrentPage = TorrentPage(driver)
 
-        val torrents = torrentPage.getResults()
+        torrentPage.sortBySelect.selectByIndex(3)   // size
+        torrentPage.sortModeSelect.selectByIndex(0) // desc
+        torrentPage.searchButton.click()
 
-        assertEquals(50, torrents.size)
-        assertEquals(2260, torrents[0].sizeMb)
+        val torrents = torrentPage.getResults()
+        assertTrue(IntStream.range(0, torrents.size - 1).noneMatch { torrents[it].sizeMb < torrents[it + 1].sizeMb })
+
+        driver.quit()
     }
 
 }
