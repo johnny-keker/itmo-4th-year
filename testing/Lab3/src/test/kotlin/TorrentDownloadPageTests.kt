@@ -1,11 +1,10 @@
-package webpages
-
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 import utils.Credentials
 import utils.TorrentUtils
+import webpages.TorrentDownloadPage
 import java.io.File
 import java.io.InputStream
 import java.net.URL
