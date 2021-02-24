@@ -1,0 +1,156 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[a4paper, includeheadfoot, mag=1000, left=2cm, right=1.5cm, top=1.5cm, bottom=1.5cm, headsep=0.8cm, footskip=0.8cm]{geometry}
+% Fonts
+\usepackage{fontspec, unicode-math}
+\setmainfont[Ligatures=TeX]{CMU Serif}
+\setmonofont{CMU Typewriter Text}
+\usepackage[english, russian]{babel}
+% Indent first paragraph
+\usepackage{indentfirst}
+\setlength{\parskip}{5pt}
+% Diagrams
+\usepackage{graphicx}
+\usepackage{float}
+% Page headings
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{16pt}
+%\newfontfamily\namefont[Scale=1.2]{Gloria Hallelujah}
+\fancyhead{}
+
+\usepackage{amsmath}
+
+\graphicspath{ {images/} }
+
+\usepackage{listings}
+\lstdefinestyle{lablisting}{
+  basicstyle=\scriptsize\ttfamily,
+  numbers=left,
+  stepnumber=1,
+  otherkeywords={EOF, O\_RDONLY, STDIN\_FILENO, STDOUT\_FILENO, STDERR\_FILENO},
+  numbersep=10pt,
+  showspaces=false,
+  showstringspaces=false
+}
+
+\newcommand{\specialcell}[2][l]{%
+  \begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
+
+\begin{document}
+
+% Title page
+\begin{titlepage}
+\begin{center}
+
+\textsc{Национальный исследовательский университет ИТМО}
+\vfill
+\textbf{Лабораторная работа №1\\[4mm]
+по дисципение Метрология, стандартизация и сертификация\\[16mm]
+}
+%\textit{Вариант 11\\[16mm]}
+\begin{flushright}
+Студент: Саржевский Иван
+\\[2mm]Группа: P3302
+\end{flushright}
+\vfill
+г. Санкт-Петербург\\[2mm]
+2021 г.
+
+\end{center}
+\end{titlepage}
+
+\section*{Задание}
+
+Записать оценку измеряемой величины с учетом случайной и
+систематической погрешностей, если производились прямые измерения.
+
+\section*{Измерения}
+
+\begin{center}
+\begin{tabular}{|c|c|}
+  \hline
+  N & Значение, мм \\\hline
+  1 & 1.2 \\\hline
+  2 & 1.3 \\\hline
+  3 & 1.4 \\\hline
+  4 & 1.3 \\\hline
+  5 & 1.3 \\\hline
+\end{tabular}
+\end{center}
+
+\section*{Ход работы}
+
+\subsection*{Устранение или учет известных систематических погрешностей}
+
+О системных погрешностях ничего не известно, поэтому переходим к пункту 2.
+
+\subsection*{Вычисление среднего значения}
+
+За эту оценку принимают среднее арифметическое значение  по формуле:
+
+$$\bar{x} = \frac{1}{n} * \sum_{i = 1}^{n} x_i$$
+
+$\bar{x} = 1/5 * (1.2 + 1.3 + 1.4 + 1.3 + 1.3) = 1.3$ мм.
+
+\subsection*{Вычисление среднего квадратического отклонения}
+
+$$S_x = \sqrt{\frac{1}{n-1} * \sum_{i = 1}^{n} (x_i - \bar{x})^2}$$
+
+$S_x = \sqrt{\frac{1}{4} * \sum_{i = 1}^{n} (x_i - 1.3)^2} = 0.0707$ мм.
+
+\subsection*{Среднеквадратическое отклонение среднего арифметического}
+
+$$S_{\bar{x}} = \frac{S}{\sqrt{n}}$$
+
+$S_{\bar{x}} = 0.0707 / \sqrt{5} = 0.0316$ мм.
+
+\subsection*{Исключение грубых погрешностей}
+
+$$G_1 = \frac{|x_{max} - \bar{x}|}{S}; G_2 = \frac{|\bar{x} - x_{min}|}{S}$$
+
+$G_1 = \frac{|1.4 - 1.3|}{0.0707} = 1.414$
+
+$G_2 = \frac{|1.2 - 1.3|}{0.0707} = 1.414$
+
+$G_T = 1.715$ для $q = 5\%$ и пяти измерений.
+
+$G_1 \leq G_T$, поэтому $x_{max}$ не считаем промахом.
+
+$G_2 \leq G_T$, поэтому $x_{min}$ не считаем промахом.
+
+\subsection*{Доверительные границы случайной погрешности}
+
+$$\epsilon = t S_x, t [P = 95\%; n = 5] = 2.776$$
+
+$\epsilon = 0.0316 * 2.776 = 0.0877$ мм.
+
+\subsection*{Учет систематической погрешности}
+
+$\theta = 0.1$ мм, согласно надписи на приборе.
+
+\subsection*{Учет полной абсолютной погрешности прямого измерения}
+
+\subsubsection*{Абсолютная погрешность}
+
+$$\Delta \bar{x} = \sqrt{\epsilon^2 + \theta^2}$$
+
+$\Delta \bar{x} = \sqrt{0.0877^2 + 0.1^2} = 0.133$ мм.
+
+\subsubsection*{Относительная погрешность}
+
+$$\delta x = \frac{\Delta \bar{x}}{\bar{x}} * 100\%$$
+
+$\delta x = \frac{0.133}{1.3} = 10.23\%$
+
+\subsection*{Запись результата}
+
+$$x \approx 1.30 \pm 0.13 \text{мм.}$$
+
+\section*{Вывод}
+
+В результате выполнения данной лабораторной работы была произведена
+запись оценки измеряемой величины с учетом случайной и систематической
+погрешностей по результатам прямых измерений.
+
+\end{document}
