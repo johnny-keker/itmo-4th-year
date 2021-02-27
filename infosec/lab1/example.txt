@@ -1,1 +1,3 @@
-abcd
+abcdRFastq12312 124 124 12
+
+12asf asfqwr
