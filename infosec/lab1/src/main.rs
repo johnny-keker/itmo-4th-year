@@ -36,7 +36,5 @@ fn main() {
         .expect("Something went wrong reading the file");
     
     println!("Source text:\n{}", contents);
-
-    println!("\nEncoded text:");
-    println!("{}", encode_text(contents, offset));
+    println!("\nEncoded text:\n{}", encode_text(contents, offset));
 }
