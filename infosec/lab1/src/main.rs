@@ -24,7 +24,7 @@ fn encode_text(input_text: String, offset: usize, left: bool) -> String {
         let lower_case = cur_char.to_ascii_lowercase();
         let idx = ALPHABET.iter().position(|&r| r == lower_case).unwrap_or(27);
 
-        let new_idx = if left {get_left_idx(idx, offset)} else {(idx + offset) % 26};
+        let new_idx = if left {get_left_idx(idx, offset % 26)} else {(idx + offset) % 26};
         let mut new_char = if idx == 27 {lower_case} else {ALPHABET[new_idx]};
         if cur_char.is_ascii_uppercase() {
             new_char = new_char.to_ascii_uppercase();
