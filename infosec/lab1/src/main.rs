@@ -8,7 +8,15 @@ const ALPHABET: [char; 26] = [
     'v', 'w', 'x', 'y', 'z'
 ];
 
-fn encode_text(input_text: String, offset: usize) -> String {
+fn get_left_idx(idx: usize, offset: usize) -> usize {
+    if idx >= offset {
+        return idx - offset;
+    } else {
+        return 26 - (offset - idx);
+    }
+}
+
+fn encode_text(input_text: String, offset: usize, left: bool) -> String {
     let len = input_text.len();
     let mut result = String::with_capacity(len);
 
@@ -16,7 +24,8 @@ fn encode_text(input_text: String, offset: usize) -> String {
         let lower_case = cur_char.to_ascii_lowercase();
         let idx = ALPHABET.iter().position(|&r| r == lower_case).unwrap_or(27);
 
-        let mut new_char = if idx == 27 {lower_case} else {ALPHABET[(idx + offset) % 26]};
+        let new_idx = if left {get_left_idx(idx, offset)} else {(idx + offset) % 26};
+        let mut new_char = if idx == 27 {lower_case} else {ALPHABET[new_idx]};
         if cur_char.is_ascii_uppercase() {
             new_char = new_char.to_ascii_uppercase();
         }
@@ -32,9 +41,10 @@ fn main() {
 
     let filename = &args[1];
     let offset = *(&args[2].parse::<usize>().unwrap());
+    let left = if args.len() == 4 {&args[3] == "left"} else {false};
     let contents = fs::read_to_string(filename)
         .expect("Something went wrong reading the file");
     
     println!("Source text:\n{}", contents);
-    println!("\nEncoded text:\n{}", encode_text(contents, offset));
+    println!("\nEncoded text:\n{}", encode_text(contents, offset, left));
 }
