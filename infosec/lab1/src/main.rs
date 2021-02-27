@@ -37,6 +37,6 @@ fn main() {
     
     println!("Source text:\n{}", contents);
 
-    println!("Encoded text:");
+    println!("\nEncoded text:");
     println!("{}", encode_text(contents, offset));
 }
