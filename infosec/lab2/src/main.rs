@@ -1,3 +1,5 @@
+use rand::Rng;
+
 const S: [[u32; 16]; 8] = [
     [0xC, 0x4, 0x5, 0x2, 0xA, 0x5, 0xB, 0x9, 0xE, 0x8, 0xD, 0x7, 0x0, 0x3, 0xF, 0x1],
     [0x6, 0x8, 0x2, 0x3, 0x9, 0xA, 0x5, 0xC, 0x1, 0xE, 0x4, 0x7, 0xB, 0xD, 0x0, 0xF],
@@ -9,7 +11,7 @@ const S: [[u32; 16]; 8] = [
     [0x1, 0x7, 0xE, 0xD, 0x0, 0x5, 0x8, 0x3, 0x4, 0xF, 0xA, 0x6, 0x9, 0xC, 0xB, 0x2] 
 ];
 
-const K: [i32; 8] = [
+const K: [u32; 8] = [
     0x00000001,
     0x00000002,
     0x00000003,
@@ -20,31 +22,56 @@ const K: [i32; 8] = [
     0x00000008
 ];
 
-fn gost(block: u32, key: u32) -> u32 {
+fn gost_func(block: u32, key: u32) -> u32 {
     let tmp = (block as u64 + key as u64) as u32;
-    //println!("tmp = {}", format!{"{:#X}", tmp});
     let mut mask: u32 = 0x0000000F;
     let mut result: u32 = 0;
     for i in 0..8 {
         let cur_num = (tmp & mask) >> (i * 4);
-        //println!("num_{} = {}", i, cur_num);
-        //println!("S_{} = {}", i, format!{"{:#X}", S[0][cur_num as usize]});
         result |= S[i][cur_num as usize] << (i * 4);
         mask = mask << 4;
     }
     return result.rotate_left(11);
 }
 
-fn crypt(left: &mut u32, right: &mut u32, rounds: usize) {
-    // for i in 0..rounds {
-    //     let cur_key = if i < 24 {K[i % 8]} else {K[7 - (i % 8)]};
-    //     let tmp = *right ^ function(*left, cur_key);
-    //     *right = *left;
-    //     *left = tmp;
-    // }
+fn gost(block: u64) -> u64 {
+    let mut left = (block >> 32) as u32;
+    let mut right = block as u32;
+    for i in 0..32 {
+        let cur_key = if i < 24 {K[i % 8]} else {K[7 - (i % 8)]};
+        let tmp = right ^ gost_func(left, cur_key);
+        right = left;
+        left = tmp;
+    }
+    return (right as u64) | ((left as u64) << 32);
+}
+
+fn gost_dec(block: u64) -> u64 {
+    let mut left = (block >> 32) as u32;
+    let mut right = block as u32;
+    for i in 0..32 {
+        let idx = if i < 8 {i} else {7 - (i % 8)};
+        let cur_key = K[idx];
+        let tmp = left ^ gost_func(right, cur_key);
+        left = right;
+        right = tmp;
+    }
+    return (right as u64) | ((left as u64) << 32);
+}
+
+fn encrypt() {
+    let mut rng = rand::thread_rng();
+
+    let block: u64 = rng.gen();
+    println!("blk = {}", format!{"{:#X}", block});
+
+    let encrypted = gost(block);
+    println!("enc = {}", format!{"{:#X}", encrypted});
+
+    let decrypted = gost_dec(encrypted);
+    println!("dec = {}", format!{"{:#X}", decrypted});
 }
 
 fn main() {
-    let res = gost(5, 5);
-    println!("{}", format!{"{:#X}", res});
+    encrypt();
 }
