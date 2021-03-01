@@ -106,7 +106,7 @@ pub fn encrypt(filename: String, out_filename: String, iv: u64, k: [u32; 8]) {
 }
 
 // to initiate 64 bit IV and 256 bit key I use the file
-// with memorable passpharse. It needs to be at least
+// with memorable passphrase. It needs to be at least
 // 40 bytes long to fit 8 bytes of IV and 32 bytes of key
 pub fn get_iv_and_ks(filename: String) -> Option<(u64, [u32; 8])> {
     let bytes = fs::read(filename)
@@ -115,7 +115,7 @@ pub fn get_iv_and_ks(filename: String) -> Option<(u64, [u32; 8])> {
         return None;
     }
     let iv = as_u64_le(&bytes, 0); // use first 8 bytes of file as IV
-    let mut k: [u32; 8] = [0; 8]; // use next 32 bytes of file as 8 4 bytes subkeys
+    let mut k: [u32; 8] = [0; 8]; // use next 32 bytes of file as 8 4-byte subkeys
     for i in 0..8 {
         k[i] = as_u32_le(&bytes, 8 + i * 4);
     }
