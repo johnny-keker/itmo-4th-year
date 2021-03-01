@@ -1,5 +1,10 @@
-use rand::Rng;
-use std::io::{self, Read};
+extern crate getopts;
+use getopts::Options;
+use std::env;
+use std::fs;
+
+use std::io::prelude::*;
+use std::fs::File;
 
 const S: [[u32; 16]; 8] = [
     [0xC, 0x4, 0x5, 0x2, 0xA, 0x5, 0xB, 0x9, 0xE, 0x8, 0xD, 0x7, 0x0, 0x3, 0xF, 0x1],
@@ -12,19 +17,27 @@ const S: [[u32; 16]; 8] = [
     [0x1, 0x7, 0xE, 0xD, 0x0, 0x5, 0x8, 0x3, 0x4, 0xF, 0xA, 0x6, 0x9, 0xC, 0xB, 0x2] 
 ];
 
-fn as_u64_le(array: &[u8]) -> u64 {
-    return
-        ((array[0] as u64) <<  0) +
-        ((array[1] as u64) <<  8) +
-        ((array[2] as u64) << 16) +
-        ((array[3] as u64) << 24) +
-        ((array[4] as u64) << 32) +
-        ((array[5] as u64) << 40) +
-        ((array[6] as u64) << 48) +
-        ((array[7] as u64) << 56);
+fn get_array_value(array: &Vec<u8>, i: usize, offset: usize) -> u64 {
+    let len = array.len();
+    if i + offset >= len {
+        return 0;
+    }
+    return array[i + offset] as u64;
 }
 
-fn as_u32_le(array: &[u8], offset: usize) -> u32 {
+fn as_u64_le(array: &Vec<u8>, offset: usize) -> u64 {
+    return
+        (get_array_value(array, 0, offset) <<  0) +
+        (get_array_value(array, 1, offset) <<  8) +
+        (get_array_value(array, 2, offset) << 16) +
+        (get_array_value(array, 3, offset) << 24) +
+        (get_array_value(array, 4, offset) << 32) +
+        (get_array_value(array, 5, offset) << 40) +
+        (get_array_value(array, 6, offset) << 48) +
+        (get_array_value(array, 7, offset) << 56);
+}
+
+fn as_u32_le(array: &Vec<u8>, offset: usize) -> u32 {
     return
         ((array[0 + offset] as u32) <<  0) +
         ((array[1 + offset] as u32) <<  8) +
@@ -69,51 +82,81 @@ fn gost_dec(block: u64, k: [u32; 8]) -> u64 {
     return (right as u64) | ((left as u64) << 32);
 }
 
-fn encrypt(iv: u64, k: [u32; 8]) {
-    let mut rng = rand::thread_rng();
+fn encrypt(filename: String, iv: u64, k: [u32; 8]) {
+    let file_bytes = fs::read(filename)
+        .expect("Cannot read input file, check the spelling");
+    
+    let byte_count = file_bytes.len();
+    let mut encoded_bytes = 0;
 
-    println!("blk = {}", format!{"{:#X}", iv});
+    let mut res: Vec<u8> = Vec::new();
 
-    let encrypted = gost(iv, k);
-    println!("enc = {}", format!{"{:#X}", encrypted});
+    let mut gamma = gost(iv, k);
+    let mut block = as_u64_le(&file_bytes, 0);
+    let mut encoded = block ^ gamma;
+    res.extend_from_slice(&encoded.to_le_bytes());
+    encoded_bytes += 8;
 
-    let decrypted = gost_dec(encrypted, k);
-    println!("dec = {}", format!{"{:#X}", decrypted});
+    while encoded_bytes < byte_count {
+        gamma = gost(gamma, k);
+        block = as_u64_le(&file_bytes, encoded_bytes);
+        encoded = block ^ gamma;
+        res.extend_from_slice(&encoded.to_le_bytes());
+        encoded_bytes += 8;
+    }
+
+    let mut pos = 0;
+    let mut buffer = File::create("foo.txt").unwrap();
+
+    while pos < res.len() {
+        let bytes_written = buffer.write(&res[pos..]).unwrap();
+        pos += bytes_written;
+    }
 }
 
-fn get_IV() -> Option<u64> {
-    println!("Enter the initial buffer phrase (at least 8 chars): ");
-    let mut IV_string = String::new();
-    let mut stdin = io::stdin();
-    stdin.read_line(&mut IV_string).unwrap();
-    if IV_string.len() <= 8 {
+fn get_iv_and_passphrase(filename: String) -> Option<(u64, [u32; 8])> {
+    let bytes = fs::read(filename)
+        .expect("Cannot read passphrase file, check the spelling");
+    if bytes.len() <= 40 {
         return None;
     }
-    return Some(as_u64_le(IV_string.as_bytes()));
-}
-
-fn get_passphrase() -> Option<[u32; 8]> {
-    println!("Enter passphrase (at least 32 chars): ");
-    let mut pass_string = String::new();
-    let mut stdin = io::stdin();
-    stdin.read_line(&mut pass_string).unwrap();
-
-    if pass_string.len() <= 32 {
-        return None;
-    }
-    let mut res: [u32; 8] = [0; 8];
-    let bytes = pass_string.as_bytes();
+    let iv = as_u64_le(&bytes, 0);
+    let mut k: [u32; 8] = [0; 8];
     for i in 0..8 {
-        res[i] = as_u32_le(bytes, i * 4);
+        k[i] = as_u32_le(&bytes, 8 + i * 4);
     }
 
-    return Some(res);
+    return Some((iv, k));
 }
 
 fn main() {
-    let IV = get_IV().expect("Initial buffer phrase must contain at least 8 chars!");
-    let K = get_passphrase().expect("Passphrase must contain at least 32 chars!");
-    println!("{:?}", K);
+    let args: Vec<String> = env::args().collect();
 
-    encrypt(IV, K);
+    let mut opts = Options::new();
+    opts.optopt("f", "file", "input file name", "input.txt");
+    opts.optopt("s", "sec_file", "file with passphase", "secret.txt");
+    opts.optflag("d", "decode", "decode input file (default is encode)");
+
+    let matches = match opts.parse(&args[1..]) {
+        Ok(m) => { m }
+        Err(f) => { panic!(f.to_string()) }
+    };
+
+    if !matches.opt_present("f") {
+        println!("You must specify the input file!");
+        return;
+    }
+
+    if !matches.opt_present("s") {
+        println!("You must specify the passphrase file!");
+        return;
+    }
+
+    let input_file = matches.opt_str("f").unwrap();
+    let secret_file = matches.opt_str("s").unwrap();
+
+    let (iv, k) = get_iv_and_passphrase(secret_file)
+        .expect("Secret phrase must contain at least 40 characters!");
+
+    encrypt(input_file, iv, k);
 }
