@@ -6,7 +6,7 @@ const REL_FREQ: [f32; 26] = [
     7.5, 1.9, 0.095, 6.0, 6.3, 9.1, 2.8,
     0.98, 2.4, 0.15, 2.0, 0.074
 ];
-
+// find the closest by the probability english letter
 pub fn get_closest_alphabet_idx(freq: f32) -> usize {
     let mut min = f32::MAX;
     let mut min_idx = 27;
@@ -22,6 +22,8 @@ pub fn get_closest_alphabet_idx(freq: f32) -> usize {
 }
 
 pub fn decode_text(encoded_text: String) -> String {
+    // here we count all the occurences of all the english letters
+    // and total letter count to count the relative freqs later
     let mut letter_count: [usize; 26] = [0; 26];
     let mut letters_sym_count = 0;
     for c in encoded_text.chars() {
@@ -31,19 +33,17 @@ pub fn decode_text(encoded_text: String) -> String {
             letter_count[idx] += 1;
         };
     };
-
-
+    
+    // find the closest real letter for every letter in encoded text
     let mut real_idx_mapping: [usize; 26] = [27; 26];
-    //let mut freq_sum = 0.0;
     for (i, c) in letter_count.iter().enumerate() {
         real_idx_mapping[i] = get_closest_alphabet_idx((*c as f32 / letters_sym_count as f32) * 100.0);
-        //freq_sum += *c as f32 / letters_sym_count as f32;
-        //println!("{} = {}", i, *c as f32 / letters_sym_count as f32);
     }
-    //println!("Freq sum = {}", freq_sum);
-
+    
+    // allocate the space for the result string
     let mut res = String::with_capacity(encoded_text.len());
-
+    // replacing the characters from encoded string with the
+    // assumed real characters
     for c in encoded_text.chars() {
         let idx = alphabet::ALPHABET.iter().position(|&r| r == c.to_ascii_lowercase()).unwrap_or(27);
         let mut new_char = if idx == 27 {c} else {alphabet::ALPHABET[real_idx_mapping[idx]]};
