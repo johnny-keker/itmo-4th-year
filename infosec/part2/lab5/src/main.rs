@@ -9,8 +9,9 @@ use std::fs;
 use std::env;
 
 fn main() {
+  // creating a E(-1, 1) mod 751 curve
   let curve = Curve { a: -1, b: 1, p: 751 };
-  let g = Point { x: 0, y: 1 };
+  let g = Point { x: 0, y: 1 }; // G = (0, 1)
 
   // --- Adding cmd line arguments: ------------------
   //      -f: Path to input data yaml-file
