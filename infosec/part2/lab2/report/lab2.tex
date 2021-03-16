@@ -1,0 +1,123 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[a4paper, includeheadfoot, mag=1000, left=2cm, right=1.5cm, top=1.5cm, bottom=1.5cm, headsep=0.8cm, footskip=0.8cm]{geometry}
+% Fonts
+\usepackage{fontspec, unicode-math}
+\setmainfont[Ligatures=TeX]{CMU Serif}
+\setmonofont{CMU Typewriter Text}
+\usepackage[english, russian]{babel}
+% Indent first paragraph
+\usepackage{indentfirst}
+\setlength{\parskip}{5pt}
+% Diagrams
+\usepackage{graphicx}
+\usepackage{float}
+% Page headings
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{16pt}
+%\newfontfamily\namefont[Scale=1.2]{Gloria Hallelujah}
+\fancyhead{}
+
+\usepackage{amsmath}
+
+\graphicspath{ {./images/} }
+
+\usepackage{listings}
+\lstdefinestyle{lablisting}{
+  basicstyle=\scriptsize\ttfamily,
+  numbers=left,
+  stepnumber=1,
+  otherkeywords={EOF, O\_RDONLY, STDIN\_FILENO, STDOUT\_FILENO, STDERR\_FILENO},
+  numbersep=10pt,
+  showspaces=false,
+  showstringspaces=false
+}
+
+\newcommand{\specialcell}[2][l]{%
+  \begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
+
+\begin{document}
+
+% Title page
+\begin{titlepage}
+\begin{center}
+
+\textsc{Федеральное государственное автономное образовательное учреждение высшего\\
+образования "Национальный исследовательский университет ИТМО"}
+\vfill
+\textbf{Лабораторная работа №2\\[4mm]
+по дисципение "Информационная безопасность"\\[4mm]
+Атака на алгоритм шифрования RSA методом повторного шифрования\\[4mm]
+}
+\textit{Вариант 10\\[20mm]}
+\begin{flushright}
+Выполнил: студент Саржевский И.А.
+\\[2mm]Группа: P3402\\[4mm]
+Преподаватель: к.т.н., доцент\\
+Маркина Т.А.
+\end{flushright}
+\vfill
+г. Санкт-Петербург\\[2mm]
+2021 г.
+
+\end{center}
+\end{titlepage}
+
+\begin{huge}Лабораторная работа №2\end{huge}\\[4mm]
+\begin{Large}Атака на алгоритм шифрования RSA методом повторного\\шифрования\end{Large}\\
+
+\section*{Цель работы}
+
+Изучить атаку на алгоритм шифрования RSA методом повторного шифрования.
+
+\section*{Задание}
+
+Алгоритм шифрования RSA состоит из следующих шагов:
+
+\begin{enumerate}
+  \item Выбираются простые числа p и q, вычисляется n = p * q;
+  \item $\phi(n) = (p - 1)(q - 1)$;
+  \item Находится число e, взаимно простое $\phi(n)$;
+  \item Вычисляется $d$, такое, что $de$ эквивалентно единице по модулю $\phi(n)$.
+\end{enumerate}
+
+$(n,e)$ - публичный ключ. Для шифрования сообщение разбивается на блоки $t (<n)$,
+зашифрованный текст: $c = t^e mod n$.
+
+Для дешифрования используется приватный ключ $(n,d)$: $t = c^d\:mod\:n$.
+
+В данной лабораторной работе рассматривается атака с помощью повторного шифрования.
+Метод заключается в решении уравнения $y = x^e\:mod\:n$. Для этого строим последовательность,
+где $y_1 = y$, каждый следующий $y_i = y_{i-1}^e\:mod\:n$. Если текущий $y_i$ равен
+изначальному $C$, то $y_{i-1}$ является решением уравнения $y = x^e\:mod\:n$, и,
+следовательно, открытым текстом.
+
+Разработанная программа принимает путь к yaml-файлу, в котором описаны исходные
+данные: N, e и блоки данных C.
+\newpage
+\section*{Исходные данные}
+
+\lstinputlisting[style=lablisting]{../src/input.yaml}
+
+\section*{Листинг разработанной программы}
+
+\subsubsection*{main.rs}
+
+\lstinputlisting[style=lablisting]{../src/main.rs}
+
+\section*{Результаты работы программы}
+
+\begin{figure}[H]
+    \includegraphics[scale = 0.7]{res}
+    \caption{Результат работы программы}
+    \centering
+\end{figure}
+
+\section*{Вывод}
+
+В результате выполнения данной лабораторной работы была изучена атака на
+алгоритм шифрования RSA методом методом повторного шифрования. Была реализована
+программа, позволяющая расшифровать сообщение, зашифрованное с помощью RSA.
+
+\end{document}

@@ -25,13 +25,12 @@ pub fn get_d(n: i64, e: i64) -> i64 {
   let phi_n = (p - 1) * (q - 1); // Phi(n) = (p - 1)(q - 1)
   println!("Phi(N) = {}", phi_n);
   let d = mod_inv(e as isize, phi_n as isize) as i64; // d = e^-1 mod Phi(n)
-  println!("d = {}", d);
+  println!("d = {}\n", d);
   return d;
 }
 
 // function that decodes chunk of data based on given d and n
 pub fn decode_rsa(d: i64, n: i64, c: i64) -> String {
-  println!();
   // encoder for win1251 to support cyrillic symbols
   let encoder = encoding_rs::WINDOWS_1251;
   println!("C = {}", c);
@@ -41,6 +40,5 @@ pub fn decode_rsa(d: i64, n: i64, c: i64) -> String {
   let bs = m.to_bytes_be().1;
   let (res, _, _) = encoder.decode(&bs);
   println!("Message = {}", res);
-  println!();
   return res.to_string();
 }

@@ -3,8 +3,6 @@
 # as a Map<char, Point>. It was created because the alphabet is pretty
 # big, and writing the rust module manually will be problematic, and I
 # will definitely do lots of mistakes while retyping the values :)
-# p.s. choosed python because I don't want to lose a lot of time on
-# work not directly related to the task
 
 buffer = ""
 buffer += "#[path = \"./point.rs\"] mod point;\n"

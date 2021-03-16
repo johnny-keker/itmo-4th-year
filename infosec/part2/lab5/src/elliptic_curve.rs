@@ -3,7 +3,7 @@ pub use point::Point;
 
 static DEBUG: bool = false;
 
-// define tne elliptic curve as E(a,b) mod p
+// define the elliptic curve as E(a,b) mod p
 pub struct Curve {
   pub a: i64,
   pub b: i64,

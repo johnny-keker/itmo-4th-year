@@ -163,4 +163,3 @@ pub static ALPHABET: phf::Map<char, Point> = phf_map! {
  'ъ' => Point { x: 253, y: 211 },
  'я' => Point { x: 257, y: 458 },
 };
-

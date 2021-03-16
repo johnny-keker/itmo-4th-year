@@ -44,6 +44,6 @@ fn main() {
   for c in doc["C"].as_vec().unwrap() {
     res.push_str(&rsa::decode_rsa(d, n, c.as_i64().unwrap()));
   }
-  println!("Decoded text: {}", res);
+  println!("\nDecoded text: {}", res);
   // -------------------------------------------------
 }
