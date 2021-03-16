@@ -1,5 +1,5 @@
 [package]
-name = "lab5"
+name = "lab1"
 version = "0.1.0"
 authors = ["johnny-keker <isarzhevsky@gmail.com>"]
 edition = "2018"
@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 num = "0.2.0"
-phf = { version = "0.7.24", features = ["macros"] }
+byteorder = "1.4.3"
+encoding_rs = "0.8.28"
 yaml-rust = "0.4.5"
 getopts = "0.2"
